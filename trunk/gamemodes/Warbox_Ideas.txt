@@ -1,0 +1,12 @@
+
+RTS-View:
+Players control as noclipping players with binds to do rts stuff like ordering around.
+This is because you build your tanks easy that way.
+But there should be a standard top-down rts-view players can use if they prefer that,
+although they will not be able to build when using it.
+The technical stuff:
+Players are made invisible (and frozen?), assigned to use a new camera.
+Alternativelly I use the player-entity and set their camera to a fixed angle.
+The camera is moved by wasd keys, but remove any height-direction from it.
+The GUI will look rts-ish, where you control with an unlocked mouse-pointer.
+Lock the q-menu so it cant even be brought up while in this mode?
