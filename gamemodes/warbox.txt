@@ -1,0 +1,33 @@
+"Gamemode"
+{
+	"base"		"base"
+	"title"		"Warbox"
+	"maps"		"^wb_"
+	"menusystem"	"1"
+	"workshopid"	"I didnt know I had one (tutorial had 15895)"
+
+	"settings"
+	{
+		1
+		{
+			"name"		"console_var"
+			"text"		"some console variable"
+			"help"		"help about it"
+			"type"		"numeric"
+			"default"	"0"
+		}
+
+
+		
+		2
+		{
+			"name"		"console_var_checkbox"
+			"text"		"some console variable checkbox"
+			"help"		"help about it"
+			"type"		"checkbox"
+			"default"	"1"
+		}
+
+	}
+
+}
