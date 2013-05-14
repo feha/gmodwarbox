@@ -4,9 +4,14 @@ AddCSLuaFile("shared.lua")
 
 DEFINE_BASECLASS( "base_anim" )
 
+-- local references to commonly used functions
+local v = FindMetaTable("Vector")
+local LengthSqr = v.LengthSqr
+
+
 -- Table used for "static" functions
 Structure = {}
-Structure.ENT = ENT
+Structure.ENT = ENT -- baseclassing was buggy...
 
 -- When searching for stuff extending base_structure, this table should be faster.
 local structures = {}
@@ -35,10 +40,24 @@ function Structure.Remove(structure)
 end
 
 
+-- Static helper functions
 function Structure.IsValid( structure )
 	return IsValid(structure) and structure.IsStructure and structure.IsAlive
 end
 
+
+function Structure.UpdateNetworkedVariables( )
+	for k, ply in pairs(player.GetAll()) do
+		local entity = ply:GetEyeTrace().Entity
+		if entity and LengthSqr(ply:GetPos() - entity:GetPos()) < Balance.notsorted.WorldTipDisplayRangeSqr then
+			-- Might change from networked vars to something like net-lib
+			entity:SetNetworkedInt("WB_MaxHealth", math.floor(entity.MaxHealth))
+			entity:SetNetworkedInt("WB_CurHealth", math.floor(entity.CurHealth))
+			entity:SetNetworkedFloat("WB_BuildProgress", entity.BuildProgress)
+		end
+	end
+end
+timer.Create( "Structure.UpdateNetworkedVariables", Balance.notsorted.WorlTipUpdateRate, 0, Structure.UpdateNetworkedVariables )
 
 -----------------------------------------------------------------------------------------
 
@@ -57,6 +76,11 @@ function ENT:Initialize()
 	self.Building		=	true
 	self.BuildProgress	=	0
 	self.CurHealth		=	self.MaxHealth
+	
+	-- Networked variables
+	self:SetNetworkedInt("WB_MaxHealth", math.floor(self.MaxHealth))
+	self:SetNetworkedInt("WB_CurHealth", math.floor(self.CurHealth))
+    self:SetNetworkedFloat("WB_BuildProgress", self.BuildProgress)
 	
 	-- make it static?
 	self:SetModel( self.Model )
@@ -95,11 +119,11 @@ function ENT:Think()
 	if GetGameIsPaused() == 0 then
 	
 		if self.Building and self.IsAlive then
-			self.BuildProgress = self.BuildProgress + self.Delay/self.BuildTime
+			self.BuildProgress = math.min(self.BuildProgress + self.Delay/self.BuildTime, 1)
 			self.Building = (self.BuildProgress < 1)
 			
 			local color = self:GetColor()
-			color.a = 100 + math.min(155*self.BuildProgress,155)
+			color.a = 100 + math.min(155 * self.BuildProgress, 155)
 			self:SetColor(color)
 		end
 		
