@@ -6,6 +6,7 @@ DEFINE_BASECLASS( "base_anim" )
 
 -- Table used for "static" functions
 Structure = {}
+Structure.ENT = ENT
 
 -- When searching for stuff extending base_structure, this table should be faster.
 local structures = {}
@@ -23,6 +24,7 @@ function Structure.Add(structure)
 	structure:CallOnRemove( "RemoveUnit", Structure.Remove )
 end
 function Structure.Remove(structure)
+	print(structure)
 	for k,v in pairs(structures) do
 		if (structure == v) then
 			table.remove(structures, k)
@@ -32,6 +34,13 @@ function Structure.Remove(structure)
 	end
 end
 
+
+function Structure.IsValid( structure )
+	return IsValid(structure) and structure.IsStructure and structure.IsAlive
+end
+
+
+-----------------------------------------------------------------------------------------
 
 
 function ENT:Initialize()
@@ -50,7 +59,7 @@ function ENT:Initialize()
 
 	self.BuildProgress	=	0
 	self.Building		=	true
-	self.IsDead			=	false -- True when dead => IsStructure check not needed since (not false) == (not nil)
+	self.IsAlive		=	true
 	
 	
 	-- make it static?
@@ -83,13 +92,11 @@ function ENT:Initialize()
 end
 
 
--- Used for stuff like building. will have to be split in different ways.
--- Structures and units both need to be built (further baseclass?),
--- but units will have target aquiring as well.
-function ENT:Think ()
+function ENT:Think()
+	
 	if GetGameIsPaused() == 0 then
 	
-		if self.Building and self.IsDead then
+		if self.Building and self.IsAlive then
 			self.BuildProgress = self.BuildProgress + self.Delay/self.BuildTime
 			self.Building = (self.BuildProgress < 1)
 			
@@ -100,17 +107,17 @@ function ENT:Think ()
 		
 	end
 	
-	
     self:NextThink(CurTime() + self.Delay)
 	return true
+	
 end
 
 
--- all things will have health and die when shoot too much.
-function ENT:OnTakeDamage (dmginfo)
+-- All things will has health and die when damaged too much.
+function ENT:OnTakeDamage(dmginfo)
 	self:TakePhysicsDamage(dmginfo)
 	
-	if not self.IsDead then
+	if self.IsAlive then
 		self.CurHealth = self.CurHealth - dmginfo:GetDamage()
 		if self.CurHealth <= 0 then
 			self:OnDeath()
@@ -121,7 +128,7 @@ end
 
 function ENT:OnDeath()
 	print("death")
-	self.IsDead = true
+	self.IsAlive = false
 	--self:BeforeDeathFunc()
 	
 	local expl = ents.Create("env_explosion")
@@ -138,6 +145,7 @@ function ENT:OnDeath()
 	self:SetColor (0, 0, 0, 255)
 	self:Remove() -- add a timer for removing stuff, so it sticks around a little while
 end
+
 
 -- team stuff
 function ENT:GetUnitType()

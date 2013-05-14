@@ -127,6 +127,10 @@ end
 
 
 -- Unit Selection ----------------
+function PLAYER:IsAllmighty()
+	return self:GetTeam().Index <= 0
+end
+
 function PLAYER:SelectStart()
 	self.SelectionStartPos = self:GetEyeTrace().HitPos
 	print(self.SelectionStartPos)
@@ -140,7 +144,7 @@ function PLAYER:SelectThink()
 	local center = selectionEnd + direction
 	local radius = vector.LengthSqr(direction)
 	
-	-- Do effect to show current selectino target
+	-- Do effect to show current selection target
 end
 
 local v = FindMetaTable("Vector")
@@ -166,7 +170,7 @@ function PLAYER:SelectEnd(add_to_selection, select_non_mobile, select_of_type, s
 	local type_to_unit = {}
 	local types_in_selection = {}
 	for k,v in pairs(source) do
-		if v:GetTeam() == self:GetTeam() and not v.IsDead then
+		if (v:GetTeam() == self:GetTeam() or self:IsAllmighty()) and v.IsAlive then
 			if select_of_type then
 				if not type_to_unit[v:GetUnitType()] then
 					type_to_unit[v:GetUnitType()] = {}
@@ -186,7 +190,7 @@ function PLAYER:SelectEnd(add_to_selection, select_non_mobile, select_of_type, s
 	
 	-- If selection is empty and player aimed at a unit, force it to the selection.
 	if self:GetUnitSelectionCount() == 0 and endEntity:IsValid()
-			and endEntity.IsUnit and not endEntity.IsDead then
+			and endEntity.IsUnit and endEntity.IsAlive then
 		self:AddUnitToSelection( endEntity )
 		if select_of_type then
 			table.insert( types_in_selection, v:GetUnitType() )
@@ -215,17 +219,11 @@ function PLAYER:OrderSelection(add, follow, target, patrol)
 	local tr = self:GetEyeTrace()
 	local targetVector = tr.HitPos
 	local targetEntity = tr.Entity
-	print(targetVector)
-	print(selection)
 	for k,v in pairs(selection) do
-		print(v)
 		if v.IsMobile or (target and v.IsUnit) then
 			-- Force fire
 			if target then
-				if not add then
-					v.TargetEnt = {}
-				end
-				table.insert(v.TargetEnt, targetEntity)
+				v.ForceTarget = targetEntity
 			end
 			
 			-- Move order
