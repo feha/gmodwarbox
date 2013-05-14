@@ -9,7 +9,7 @@ Balance = {}
 local notsorted = {
 	WorldTipDisplayRange = 250, -- Range used to limit how far a unit displays its WorldTip
 	WorldTipDisplayRangeSqr = math.pow(250, 2),
-	WorlTipUpdateRate = 0.1 -- seconds
+	WorlTipUpdateRate = 0.100 -- seconds
 }
 Balance.notsorted = notsorted
 
@@ -23,6 +23,7 @@ Balance.player = player
 
 -- Base-classes
 local base_structure = {
+	IsStructure = true,
 	Model = "models/props_junk/watermelon01.mdl",
 	MaxHealth = 500, -- Default structure health
 	Delay = 1, -- seconds
@@ -34,6 +35,7 @@ Balance.base_structure = base_structure
 
 
 local base_unit = {
+	IsUnit = true,
 	MaxHealth = 100 -- Default unit health
 }
 base_unit = table.Merge( table.Copy(base_structure), base_unit ) -- merge with baseclass
@@ -75,7 +77,7 @@ Balance.base_mobile_ai = base_mobile_ai
 
 local testshooter = {
 	MaxHealth = 50, -- Default ai unit health
-	Delay = 0.500, -- seconds
+	Delay = 1.200, -- seconds
 	Range = 250,
 	Speed = 50,
 	MoveRange = 50,

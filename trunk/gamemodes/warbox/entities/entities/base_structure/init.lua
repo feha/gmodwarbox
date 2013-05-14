@@ -42,14 +42,14 @@ end
 
 -- Static helper functions
 function Structure.IsValid( structure )
-	return IsValid(structure) and structure.IsStructure and structure.IsAlive
+	return structure and IsValid(structure) and structure.IsStructure and structure.IsAlive
 end
 
 
 function Structure.UpdateNetworkedVariables( )
 	for k, ply in pairs(player.GetAll()) do
 		local entity = ply:GetEyeTrace().Entity
-		if entity and LengthSqr(ply:GetPos() - entity:GetPos()) < Balance.notsorted.WorldTipDisplayRangeSqr then
+		if Structure.IsValid( entity ) and LengthSqr(ply:GetPos() - entity:GetPos()) < Balance.notsorted.WorldTipDisplayRangeSqr then
 			-- Might change from networked vars to something like net-lib
 			entity:SetNetworkedInt("WB_MaxHealth", math.floor(entity.MaxHealth))
 			entity:SetNetworkedInt("WB_CurHealth", math.floor(entity.CurHealth))
@@ -72,6 +72,8 @@ function ENT:Initialize()
 		self[k] = v
 	end
 	
+	Structure.Add(self)
+	
 	self.IsAlive		=	true
 	self.Building		=	true
 	self.BuildProgress	=	0
@@ -87,9 +89,6 @@ function ENT:Initialize()
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )
-	
-	-- DOESN'T WORK GARRY!!1 I use clientside hax with render-*groups* instead
-	--self:SetRenderMode( RENDERMODE_TRANSALPHA )
 	
 	local physics = self:GetPhysicsObject()
 	if (physics:IsValid()) then
@@ -108,26 +107,34 @@ function ENT:Initialize()
 	color.a = 100
 	self:SetColor(color)
 	
-	self.IsStructure = true
-	Structure.Add(self)
-	
+	--self.IsStructure = true
+	self:Build()
 end
 
-
-function ENT:Think()
-	
+function ENT:Build()
 	if GetGameIsPaused() == 0 then
-	
-		if self.Building and self.IsAlive then
-			self.BuildProgress = math.min(self.BuildProgress + self.Delay/self.BuildTime, 1)
+		
+		if Structure.IsValid( self ) and self.Building then
+			local timeDiff = CurTime() - (self.LastTime or CurTime())
+			self.BuildProgress = math.min(self.BuildProgress + timeDiff/self.BuildTime, 1)
 			self.Building = (self.BuildProgress < 1)
+			self.LastTime = CurTime()
 			
 			local color = self:GetColor()
+			-- move base alpha to Balance.lua?
 			color.a = 100 + math.min(155 * self.BuildProgress, 155)
 			self:SetColor(color)
+			
+			if self.Building then
+				-- move delay to Balance-lua?
+				timer.Simple( 0.1, function() if self.Build then self:Build() end end )
+			end
 		end
 		
 	end
+end
+
+function ENT:Think()
 	
     self:NextThink(CurTime() + self.Delay)
 	return true
