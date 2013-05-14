@@ -5,21 +5,22 @@ function EFFECT:Init (fx)
 	self.Start = fx:GetStart();
 	self.End = fx:GetOrigin();
 	self.Width = fx:GetScale() or 1
-	local Colour = fx:GetAngles() or Angle( 0, 0, 0 ) //I prefer Color, but that gets highlited
-	self.R = Colour.p
-	self.G = Colour.y
-	self.B = Colour.r
-	self.Time = 0;
-	self.DTime = 0.3;
+	local color = fx:GetAngles() or Angle( 0, 0, 0 )
+	self.R = color.p
+	self.G = color.y
+	self.B = color.r
+	
+	self.CurTime = 0
+	self.EndTime = 0.3
 	
 end
 
 function EFFECT:Think ()
-	self.Time = self.Time + FrameTime();
-	return self.Time <= self.DTime;
+	self.CurTime = self.CurTime + FrameTime()
+	return self.CurTime <= self.EndTime
 end
 
 function EFFECT:Render()
-	render.SetMaterial(self.Material);
-	render.DrawBeam (self.Start, self.End, self.Width, 0, 0, Color( self.R, self.G, self.B, 255 - (self.Time/self.DTime)*255) );
+	render.SetMaterial(self.Material)
+	render.DrawBeam (self.Start, self.End, self.Width, 0, 0, Color( self.R, self.G, self.B, 255 - (self.CurTime/self.EndTime)*255) )
 end

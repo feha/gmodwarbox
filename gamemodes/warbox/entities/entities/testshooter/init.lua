@@ -22,12 +22,13 @@ function ENT:Shoot( targetEntity )
 	local pos = self:GetPos()
 	local tarpos = targetEntity:GetPos()
 	local direction = tarpos - pos
-	local colour = self:GetTeam():GetColor()
+	local color = self:GetTeam():GetColor()
 	
 	local fx_laser = EffectData()
-		fx_laser:SetOrigin(pos )
-		fx_laser:SetStart( tarpos )
-		fx_laser:SetAngles( Angle(colour.r, colour.g, colour.b) )
+		fx_laser:SetAngles( Angle(color.r, color.g, color.b) )
+		fx_laser:SetOrigin( pos )
+		fx_laser:SetStart(  tarpos )
+		fx_laser:SetScale(  2 )
 	util.Effect("coloredlaser", fx_laser)
 	
 	local fx_muzzle = EffectData()
@@ -38,5 +39,5 @@ function ENT:Shoot( targetEntity )
 	
 	self:EmitSound("Weapon_Mortar.Single", 100, 100)
 	
-	targetEntity:TakeDamage(3, self)
+	targetEntity:TakeDamage(self.Damage, self)
 end

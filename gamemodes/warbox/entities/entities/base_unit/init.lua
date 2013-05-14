@@ -48,7 +48,7 @@ function ENT:Initialize()
 	
 	BaseClass.Initialize( self )
 	
-	self.IsUnit = true
+	--self.IsUnit = true
 	self.IsAi = false
 	self.IsMobile = false
 	self.IsShooter = false

@@ -7,14 +7,18 @@ local v = FindMetaTable("Vector")
 local LengthSqr = v.LengthSqr
 
 
-ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
+--ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
 function ENT:Draw()
+	
+	-- To get transparancy you need to both set rendermode and rendergroup
+	self:SetRenderMode(RENDERMODE_TRANSALPHA )
+	self.RenderGroup = RENDERGROUP_BOTH
 	
 	-- afaik the baseclass only does self:DrawModel(), but I use baseclass anyway
 	BaseClass.Draw( self )
 	
-	-- Add stuff like build and health overlay
+	-- health and building worldtip
 	local ply = LocalPlayer()
 	if ply:GetEyeTrace().Entity == self and LengthSqr(ply:GetPos() - self:GetPos()) < Balance.notsorted.WorldTipDisplayRangeSqr then
 		if self:GetNetworkedInt("WB_BuildProgress") < 1  then
