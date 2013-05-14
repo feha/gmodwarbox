@@ -18,7 +18,7 @@ local base_structure = {
 	Model = "models/props_junk/watermelon01.mdl",
 	MaxHealth = 500, -- Default structure health
 	Delay = 1, -- seconds
-	BuildTime = 1, -- seconds
+	BuildTime = 10, -- seconds
 	DeathDamage = 50,
 	DeathRadius = 100
 }
@@ -63,3 +63,15 @@ local base_mobile_ai = {
 }
 base_mobile_ai = table.Merge( table.Copy(base_ai), base_mobile_ai )
 Balance.base_mobile_ai = base_mobile_ai
+
+
+local testshooter = {
+	MaxHealth = 50, -- Default ai unit health
+	Delay = 0.500, -- seconds
+	Range = 250,
+	Speed = 50,
+	MoveRange = 50,
+	Damage = 10
+}
+testshooter = table.Merge( table.Copy(base_mobile_ai), testshooter )
+Balance.testshooter = testshooter
