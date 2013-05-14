@@ -18,7 +18,7 @@ local base_structure = {
 	Model = "models/props_junk/watermelon01.mdl",
 	MaxHealth = 500, -- Default structure health
 	Delay = 1, -- seconds
-	BuildTime = 10, -- seconds
+	BuildTime = 1, -- seconds
 	DeathDamage = 50,
 	DeathRadius = 100
 }
@@ -28,7 +28,7 @@ Balance.base_structure = base_structure
 local base_unit = {
 	MaxHealth = 100 -- Default unit health
 }
-base_unit = table.Merge( table.Copy(base_structure), base_unit )
+base_unit = table.Merge( table.Copy(base_structure), base_unit ) -- merge with baseclass
 Balance.base_unit = base_unit
 
 

@@ -22,16 +22,14 @@ function TOOL:LeftClick(trace)
 		local Normal = trace.HitNormal
 		
 		local teem = nil
-		if ply:GetTeam() ~= nil then
-			if ply:GetTeam().Index < 0 then
-				teem = WarboxTEAM.GetTeam( self:GetClientNumber("teamnumber") )
-			else
-				teem = ply:GetTeam()
-			end
+		if ply:IsAllmighty() then
+			teem = WarboxTEAM.GetTeam( self:GetClientNumber("teamnumber") )
+		else
+			teem = ply:GetTeam()
 		end
 		
 		if (trace.Hit and not trace.HitNoDraw) then
-			unit = ents.Create("base_mobile")
+			unit = ents.Create("base_mobile_ai")
 				unit:SetPos( trace.HitPos + trace.HitNormal )
 				unit:SetAngles(Normal:Angle())
 				unit:SetTeam( teem )
