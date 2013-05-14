@@ -5,6 +5,14 @@
 
 Balance = {}
 
+-- if stuff gets sorted, MAKE SURE that you replace every usage of it to the correct one
+local notsorted = {
+	WorldTipDisplayRange = 250, -- Range used to limit how far a unit displays its WorldTip
+	WorldTipDisplayRangeSqr = math.pow(250, 2),
+	WorlTipUpdateRate = 0.1 -- seconds
+}
+Balance.notsorted = notsorted
+
 
 local player = {
 	StartRes = 500, -- Default player start resources

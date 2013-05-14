@@ -4,6 +4,14 @@ AddCSLuaFile("shared.lua")
 
 DEFINE_BASECLASS( "base_structure" )
 
+-- local references to commonly used functions and libraries
+local v = FindMetaTable("Vector")
+local Length = v.Length
+local LengthSqr = v.LengthSqr
+local Distance = v.Distance
+local GetNormal = v.GetNormal
+
+
 -- Table used for "static" functions
 Base_Unit = {}
 
@@ -35,12 +43,6 @@ end
 
 -----------------------------------------------------------------------------------------
 
--- local references to commonly used functions
-local v = FindMetaTable("Vector")
-local Length = v.Length
-local LengthSqr = v.LengthSqr
-local Distance = v.Distance
-local GetNormal = v.GetNormal
 
 function ENT:Initialize()
 	
