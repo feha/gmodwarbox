@@ -29,7 +29,7 @@ function TOOL:LeftClick(trace)
 		end
 		
 		if (trace.Hit and not trace.HitNoDraw) then
-			unit = ents.Create("base_mobile_ai")
+			unit = ents.Create("testshooter")
 				unit:SetPos( trace.HitPos + trace.HitNormal )
 				unit:SetAngles(Normal:Angle())
 				unit:SetTeam( teem )

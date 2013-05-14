@@ -46,17 +46,15 @@ function ENT:Initialize()
 	
 	BaseClass.Initialize( self )
 	
-	
 	self.IsUnit = true
-	Base_Unit.Add(self)
-	self:GetTeam():AddUnit(self) -- Unit count and such
-	
-	
 	self.IsAi = false
 	self.IsMobile = false
 	self.IsShooter = false
 	
 	self.LocalShootPos = self:OBBCenter()
+	
+	Base_Unit.Add(self)
+	self:GetTeam():AddUnit(self) -- Unit count and such
 	
 end
 
@@ -73,7 +71,8 @@ function ENT:PhysicsUpdate( phys )
 		-- like a setorder or whatever
 		phys:Wake()
 		
-		if self.IsAlive and self.IsMobile then
+		if self.IsAlive and not self.Building then
+			
 			
 			local movePos, moveDirection, moveLengthSqr = nil
 			
@@ -141,7 +140,6 @@ function ENT:Think ()
 			self:GetTarget()
 			target = self.TargetEntity
 			
-			print(target)
 			if self.IsShooter and target then
 				self:Shoot(target)
 			end
@@ -161,15 +159,11 @@ end
 ------------------------------------------
 
 function ENT:GetTarget()
-	print("-------")
 	local pos = self:GetPos()
-	print(self.ForceTarget)
 	if self.ForceTarget and Structure.IsValid(self.ForceTarget) then
 		local tarPos = self.ForceTarget:GetPos()
 		local direction = tarPos - pos
 		
-		print(self.RangeSqr)
-		print(LengthSqr(direction))
 		if LengthSqr(direction) <= self.RangeSqr then
 			local filter = player.GetAll()
 			table.insert(filter, self)
@@ -179,7 +173,6 @@ function ENT:GetTarget()
 				tracedata.filter = filter
 			local trace = util.TraceLine(tracedata)
 			
-			print(trace.Entity)
 			if trace.Entity == self.ForceTarget then
 				self.TargetEntity = self.ForceTarget
 				return self.TargetEntity

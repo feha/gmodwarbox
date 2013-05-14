@@ -49,25 +49,23 @@ function ENT:Initialize()
 	
 	-- Fields defualt values
 	self.Balance = Balance[self:GetUnitType()]
-	self.Model			=	self.Balance.Model
-	self.CurHealth		=	self.Balance.MaxHealth
-	self.MaxHealth		=	self.Balance.MaxHealth
-	self.DeathDamage	=	self.Balance.DeathDamage
-	self.DeathRadius	=	self.Balance.DeathRadius
-	self.Delay			=	self.Balance.Delay
-	self.BuildTime		=	self.Balance.BuildTime -- milliseconds
-
-	self.BuildProgress	=	0
-	self.Building		=	true
-	self.IsAlive		=	true
+	for	k, v in pairs(self.Balance) do
+		self[k] = v
+	end
 	
+	self.IsAlive		=	true
+	self.Building		=	true
+	self.BuildProgress	=	0
+	self.CurHealth		=	self.MaxHealth
 	
 	-- make it static?
 	self:SetModel( self.Model )
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )
-	self:SetRenderMode( RENDERMODE_TRANSALPHA )
+	
+	-- DOESN'T WORK GARRY!!1 I use clientside hax with render-*groups* instead
+	--self:SetRenderMode( RENDERMODE_TRANSALPHA )
 	
 	local physics = self:GetPhysicsObject()
 	if (physics:IsValid()) then
@@ -83,7 +81,7 @@ function ENT:Initialize()
 	end
 	self:SetColor( self:GetTeam().Color )
 	local color = self:GetColor()
-	color.r = 255*self.BuildProgress
+	color.a = 100
 	self:SetColor(color)
 	
 	self.IsStructure = true
@@ -101,7 +99,7 @@ function ENT:Think()
 			self.Building = (self.BuildProgress < 1)
 			
 			local color = self:GetColor()
-			color.r = math.min(255*self.BuildProgress,255)
+			color.a = 100 + math.min(155*self.BuildProgress,155)
 			self:SetColor(color)
 		end
 		
@@ -143,7 +141,9 @@ function ENT:OnDeath()
 	expl:Remove()
 	
 	self:SetColor (0, 0, 0, 255)
-	self:Remove() -- add a timer for removing stuff, so it sticks around a little while
+	self:Remove()
+	-- Add a timer for removing stuff, so it sticks around a little while
+	-- Also make it unconstrain/parent so it flies off stuff if attached
 end
 
 

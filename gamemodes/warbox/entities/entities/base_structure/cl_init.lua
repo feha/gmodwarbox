@@ -1,7 +1,13 @@
 include("shared.lua")
 
+DEFINE_BASECLASS( "base_anim" )
+
+ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
+
 function ENT:Draw()
-
-	self:DrawModel()
-
+	
+	BaseClass.Draw( self )
+	
+	-- Add stuff like build and health overlay
+	
 end
