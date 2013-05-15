@@ -29,11 +29,12 @@ function TOOL:LeftClick(trace)
 		end
 		
 		if (trace.Hit and not trace.HitNoDraw) then
-			unit = ents.Create("testshooter")
+			unit = ents.Create("wb_structure_prop")
+				unit.Model = "models/props_phx/construct/metal_plate1.mdl"
+				unit:SetModel( unit.Model )
 				unit:SetPos( trace.HitPos + trace.HitNormal )
 				unit:SetAngles(Normal:Angle())
 				unit:SetTeam( teem )
-				unit.HasGravity = true
 			unit:Spawn()
 			unit:Activate()
 			
