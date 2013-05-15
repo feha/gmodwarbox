@@ -11,15 +11,11 @@ function ENT:Initialize()
 	
 end
 
------------------------------------
---------- OVERRIDE THESE ----------
------------------------------------
-
 -- Do shooting stuff
 function ENT:Shoot( targetEntity )
-	local pos = self:GetPos()
+	local direction = self.TargetEntityDir
+	local pos = self:GetShootPos( direction )
 	local tarpos = targetEntity:GetPos()
-	local direction = tarpos - pos
 	local color = self:GetTeam():GetColor()
 	
 	local fx_laser = EffectData()
@@ -30,9 +26,9 @@ function ENT:Shoot( targetEntity )
 	util.Effect("coloredlaser", fx_laser)
 	
 	local fx_muzzle = EffectData()
-		fx_muzzle:SetOrigin(pos )
+		fx_muzzle:SetOrigin( pos )
 		fx_muzzle:SetAngles( direction:Angle() )
-		fx_muzzle:SetScale( 1.2 )
+		fx_muzzle:SetScale(  1.2 )
 	util.Effect("MuzzleEffect", fx_muzzle)
 	
 	self:EmitSound("Weapon_Mortar.Single", 100, 100)

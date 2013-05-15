@@ -161,6 +161,7 @@ function ENT:GetTarget()
 	if self.ForceTarget and Structure.IsValid(self.ForceTarget) then
 		local tarPos = self.ForceTarget:GetPos()
 		local direction = tarPos - pos
+		self.TargetEntityDir = direction
 		
 		if LengthSqr(direction) <= self.RangeSqr then
 			local filter = player.GetAll()
@@ -181,6 +182,7 @@ function ENT:GetTarget()
 	if self.TargetEntity and Structure.IsValid(self.TargetEntity) then
 		local tarPos = self.TargetEntity:GetPos()
 		local direction = tarPos - pos
+		self.TargetEntityDir = direction
 		
 		if LengthSqr(direction) <= self.RangeSqr then
 			local filter = player.GetAll()
@@ -199,32 +201,24 @@ function ENT:GetTarget()
 	
 	
 	local target = nil
-	local closestRange = nil
+	local closestRangeSqr = nil
 	local teem = self:GetTeam()
 	for _,v in pairs(Structure.GetTableReference()) do
 		if Structure.IsValid(v) and v ~= self then
 			if v:GetTeam() ~= teem and self:GetTargetPriority(v) > 0
-					and self:GetTargetPriority(v) > self:GetTargetPriority(target) then
+					and self:GetTargetPriority(v) >= self:GetTargetPriority(target) then
 				local tarPos = v:GetPos()
 				local direction = tarPos - pos
-				local range = LengthSqr(direction)
-				if range <= self.RangeSqr then
-					local filter = player.GetAll()
-					table.insert(filter, self)
-					local tracedata = {}
-					tracedata.start = self:GetShootPos( direction )
-					tracedata.endpos = tarPos
-					tracedata.filter = filter
-					local trace = util.TraceLine(tracedata)
-					if trace.Entity == v then
-						
-						-- Will there be other stuff than range priorities?
-						if  not closestRange or range < closestRange then
-							closestRange = range
-							target = v
-						end
-						
+				local rangeSqr = LengthSqr(direction)
+				if self:GetCanHit(v, tarPos, direction, rangeSqr) then
+					
+					-- Will there be other stuff than range priorities?
+					if not closestRangeSqr or rangeSqr < closestRangeSqr then
+						closestRangeSqr = rangeSqr
+						target = v
+						self.TargetEntityDir = direction
 					end
+					
 				end
 			end
 		end
@@ -246,14 +240,34 @@ end
 function ENT:GetTargetPriority( target )
 	if not target then return 0 end
 	
-	 -- Stuff not in priority list, but extending structure or unit, is still a target
+	 -- Stuff in priority list sets priority, but this can be modified for dynamic purposes if needed
+	 -- Since list only takes classnames, we also check if its a unit or structure
 	 -- Example of usage: Some sort of flak unit is likely to prioritize hoverballs and such.
-	return self.Balance.Priority[target:GetClass()]
+	return self.Priority[target:GetClass()]
 		or target.IsUnit and 20
 		or target.IsStructure and 10
 		or 0
 end
 
+function ENT:GetCanHit( target, tarpos, direction, rangeSqr )
+	if rangeSqr <= self.RangeSqr then
+		print("in range")
+		local filter = player.GetAll()
+		table.insert(filter, self)
+		local tracedata = {}
+			tracedata.start = self:GetShootPos( direction )
+			tracedata.endpos = tarpos
+			tracedata.filter = filter
+		local trace = util.TraceLine(tracedata)
+		
+		print(self)
+		print(target)
+		print(trace.Entity)
+		return trace.Entity == target
+	end
+	
+	return false
+end
 
 -----------------------------------
 --------- OVERRIDE THESE ----------

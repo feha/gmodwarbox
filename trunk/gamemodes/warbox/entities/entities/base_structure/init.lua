@@ -28,7 +28,6 @@ function Structure.Add(structure)
 	structure:CallOnRemove( "RemoveUnit", Structure.Remove )
 end
 function Structure.Remove(structure)
-	print(structure)
 	for k,v in pairs(structures) do
 		if (structure == v) then
 			table.remove(structures, k)
@@ -98,6 +97,7 @@ function ENT:Initialize()
 	if (physics:IsValid()) then
 		physics:Wake()
 		physics:SetBuoyancyRatio(self.Bouyancy or 0)
+		physics:SetMaterial("metal")
 		physics:EnableGravity(self.HasGravity)
 	end
 	
@@ -123,7 +123,7 @@ function ENT:Build()
 	if GetGameIsPaused() == 0 then
 		
 		if Structure.IsValid( self ) and self.Building then
-			local timeDiff = CurTime() - self.InitTime--(self.LastTime or CurTime())
+			local timeDiff = CurTime() - self.InitTime
 			self.BuildProgress = math.min(--[[self.BuildProgress +--]] timeDiff/self.BuildTime, 1)
 			self.Building = self.BuildProgress < 1
 			
@@ -137,6 +137,21 @@ function ENT:Build()
 			end
 		end
 		
+	end
+end
+
+-- Not normally used, but will likely be used by medics or similar. Otherwise: Remove this eventually.
+function ENT:ProgressBuild( progress ) -- in seconds
+	if self.Building then
+		self.InitTime = self.InitTime - progress
+		local timeDiff = CurTime() - self.InitTime
+		self.BuildProgress = math.min(timeDiff/self.BuildTime, 1)
+		self.Building = self.BuildProgress < 1
+		
+		local color = self:GetColor()
+		-- move base alpha to Balance.lua?
+		color.a = 100 + 155 * self.BuildProgress
+		self:SetColor(color)
 	end
 end
 

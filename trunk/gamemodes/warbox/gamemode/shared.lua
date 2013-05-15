@@ -13,7 +13,6 @@ if SERVER then
 	AddCSLuaFile( "balance.lua" )
 	AddCSLuaFile('team_extension.lua')
 	AddCSLuaFile('player_extension.lua')
-	AddCSLuaFile( "cl_worldtips.lua" )
 	AddCSLuaFile( "cl_scoreboard.lua" )
 	AddCSLuaFile( "scoreboard/scoreboard.lua" )
 	AddCSLuaFile( "scoreboard/team_frame.lua" )

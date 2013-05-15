@@ -24,9 +24,9 @@ Balance.player = player
 -- Base-classes
 local base_structure = {
 	IsStructure = true,
+	HasGravity = true,
 	Model = "models/props_junk/watermelon01.mdl",
 	MaxHealth = 500, -- Default structure health
-	Delay = 1, -- seconds
 	BuildTime = 10, -- seconds
 	DeathDamage = 50,
 	DeathRadius = 100
@@ -36,6 +36,7 @@ Balance.base_structure = base_structure
 
 local base_unit = {
 	IsUnit = true,
+	Delay = 1, -- seconds
 --	IsAi = false,
 --	IsMobile = false,
 --	IsShooter = false,
@@ -81,14 +82,44 @@ base_mobile_ai = table.Merge( table.Copy(base_ai), base_mobile_ai )
 Balance.base_mobile_ai = base_mobile_ai
 
 
-local testshooter = {
+local wb_structure_prop = {
+	Model = "",
+	MassRatio = 2.5,
+	AreaRatio = 1.685,
+	SizeRatio = 0.796,
+	MaxMaxHealth = 2000, -- Default structure health
+	BuildTime = 1, -- seconds
+	DeathDamage = 0,
+	DeathRadius = 0
+}
+wb_structure_prop = table.Merge( table.Copy(base_structure), wb_structure_prop )
+Balance.wb_structure_prop = wb_structure_prop
+
+
+local wb_shooter_scout = {
 	IsShooter = true,
 	MaxHealth = 50, -- Default ai unit health
 	Delay = 1.200, -- seconds
 	Range = 250,
-	Speed = 50,
+	Speed = 75,
 	MoveRange = 50,
 	Damage = 10
 }
-testshooter = table.Merge( table.Copy(base_mobile_ai), testshooter )
-Balance.testshooter = testshooter
+wb_shooter_scout = table.Merge( table.Copy(base_mobile_ai), wb_shooter_scout )
+Balance.wb_shooter_scout = wb_shooter_scout
+
+
+local wb_shooter_infantry = {
+	IsShooter = true,
+	MaxHealth = 100, -- Default ai unit health
+	Delay = 0.500, -- seconds
+	Speed = 50,
+	MoveRange = 50,
+	Range = 500,
+	NumberOfBullets = 1,
+	Spread = Vector(0.05, 0.05, 0.05),
+	Damage = 10,
+	BulletForce = 1,
+}
+wb_shooter_infantry = table.Merge( table.Copy(base_mobile_ai), wb_shooter_infantry )
+Balance.wb_shooter_infantry = wb_shooter_infantry
