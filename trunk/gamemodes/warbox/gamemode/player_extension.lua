@@ -36,6 +36,8 @@ function PLAYER:SetTeam( teamIndex )
 	
 	self.warboxTeam:AddPlayer(self) -- Add player to new team
 	
+	self:SetColor(self:GetTeam():GetColor()) -- Change to team-color
+	
 end
 
 function PLAYER:GetTeam( )
