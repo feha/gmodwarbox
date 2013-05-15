@@ -11,6 +11,15 @@ local meta = {}
 meta.__index = meta
 
 
+-- Index ----------------
+function meta:GetIndex()
+	return self.Index
+end
+
+function meta:IsAdmin( )
+	return self.Index < 0
+end
+
 -- Name ----------------
 function meta:GetName()
 	return self.Name
@@ -48,6 +57,18 @@ end
 
 
 -- Players ----------------
+function meta:GetPlayerCount()
+	local sum = 0
+	for k,p in pairs(self.players) do
+		sum = sum + 1
+	end
+	return sum
+end
+
+function meta:IsEmpty()
+	return self.players == nil or self.players == {} or self:GetPlayerCount() == 0
+end
+
 function meta:GetPlayersArray()
 	local tbl = {}
 	for k,_ in pairs(self.players) do
@@ -60,6 +81,10 @@ function meta:GetPlayers()
 	return table.Copy(self.players)
 end
 
+function meta:GetPlayersReference()
+	return self.players
+end
+
 function meta:AddPlayer(ply)
 	self.players[ply] = ply
 end
@@ -70,6 +95,7 @@ end
 
 
 -- Units ----------------
+-- TODO: make shared with client
 function meta:GetUnitCount()
 	return #self.units or 0
 end
@@ -135,7 +161,7 @@ end
 
 
 setmetatable(WarboxTEAM, {
-	__call = function( self, index, name, color )
+	__call = function( self, index, name, color, public )
 		assert(type(index) == "number", "index of type " .. type(index) .. " has to be a number.")
 		assert(type(name) == "string", "name of type " .. type(index) .. " has to be a string.")
 		--assert(type(color) == "Color", "color of type " .. type(index) .. " has to be a color.") -- color == number?
@@ -147,8 +173,10 @@ setmetatable(WarboxTEAM, {
 		Team.Index = index
 		Team.Name = name
 		Team.Color = Color( color.r, color.g, color.b, color.a )
+		Team.Public = public -- nil/false if only admins may join
 		
 		
+		Team.Open = true -- false When a player locks his team
 		Team.Score = 0
 		Team.Research = {}
 		Team.players = {}

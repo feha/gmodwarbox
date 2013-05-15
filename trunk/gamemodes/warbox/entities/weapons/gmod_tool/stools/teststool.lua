@@ -22,7 +22,7 @@ function TOOL:LeftClick(trace)
 		local Normal = trace.HitNormal
 		
 		local teem = nil
-		if ply:IsAllmighty() then
+		if ply:IsAdminTeam() then
 			teem = WarboxTEAM.GetTeam( self:GetClientNumber("teamnumber") )
 		else
 			teem = ply:GetTeam()

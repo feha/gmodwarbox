@@ -12,6 +12,4 @@ function ENT:Initialize()
 	self.SpeedSqr		=	math.pow(self.Speed, 2)
 	self.MoveRangeSqr	=	math.pow(self.MoveRange, 2)
 	
-	self.IsMobile = true
-	
 end

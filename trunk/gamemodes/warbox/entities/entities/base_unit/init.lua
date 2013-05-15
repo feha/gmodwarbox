@@ -48,11 +48,6 @@ function ENT:Initialize()
 	
 	BaseClass.Initialize( self )
 	
-	--self.IsUnit = true
-	self.IsAi = false
-	self.IsMobile = false
-	self.IsShooter = false
-	
 	self.LocalShootPos = self:OBBCenter()
 	
 	Base_Unit.Add(self)
@@ -150,7 +145,8 @@ function ENT:Think ()
 		
 	end
 	
-	Structure.ENT.Think( self )
+	self:NextThink(CurTime() + self.Delay)
+	return true
 	
 end
 
