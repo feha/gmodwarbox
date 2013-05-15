@@ -9,8 +9,6 @@ function ENT:Initialize()
 	BaseClass.Initialize( self )
 	
 	-- Fields defualt values
-	self.RangeSqr		=	math.pow(self.Range, 2)
-
-	self.IsAi = true
+	self.RangeSqr = math.pow(self.Range, 2)
 	
 end

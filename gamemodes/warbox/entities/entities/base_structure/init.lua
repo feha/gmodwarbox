@@ -11,7 +11,6 @@ local LengthSqr = v.LengthSqr
 
 -- Table used for "static" functions
 Structure = {}
-Structure.ENT = ENT -- baseclassing was buggy...
 
 -- When searching for stuff extending base_structure, this table should be faster.
 local structures = {}
@@ -22,7 +21,7 @@ function Structure.GetTable()
 	return table.Copy(structures)
 end
 function Structure.Add(structure)
-	assert(structure.CallOnRemove, "structure.CallOnRemove is nil. If you call Base_Unit.Remove(structure) manually, just create an empty function.")
+	assert(structure.CallOnRemove, "structure.CallOnRemove is nil. If you call Structure.Remove(structure) manually, just create an empty function.")
 	assert(type(structure.CallOnRemove) == "function", "structure.CallOnRemove is not a function. If you call Base_Unit.Remove(structure) manually, just create an empty function.")
 	
 	table.insert( structures, structure )
@@ -75,16 +74,21 @@ function ENT:Initialize()
 	Structure.Add(self)
 	
 	self.IsAlive		=	true
+	self.CurHealth		=	self.MaxHealth
 	self.Building		=	true
 	self.BuildProgress	=	0
-	self.CurHealth		=	self.MaxHealth
+	self.InitTime = CurTime()
+	
+	self:SheduleBuilding()
+	--self:Build()
 	
 	-- Networked variables
 	self:SetNetworkedInt("WB_MaxHealth", math.floor(self.MaxHealth))
 	self:SetNetworkedInt("WB_CurHealth", math.floor(self.CurHealth))
     self:SetNetworkedFloat("WB_BuildProgress", self.BuildProgress)
 	
-	-- make it static?
+	
+	-- make it static and change to physics in base_unit?
 	self:SetModel( self.Model )
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
@@ -107,38 +111,33 @@ function ENT:Initialize()
 	color.a = 100
 	self:SetColor(color)
 	
-	--self.IsStructure = true
-	self:Build()
+end
+
+
+function ENT:SheduleBuilding() -- looks cooler than copypasting this timer when I want to start building
+	-- move delay to Balance-lua?
+	timer.Simple( 0.1, function() if self.Build then self:Build() end end )
 end
 
 function ENT:Build()
 	if GetGameIsPaused() == 0 then
 		
 		if Structure.IsValid( self ) and self.Building then
-			local timeDiff = CurTime() - (self.LastTime or CurTime())
-			self.BuildProgress = math.min(self.BuildProgress + timeDiff/self.BuildTime, 1)
-			self.Building = (self.BuildProgress < 1)
-			self.LastTime = CurTime()
+			local timeDiff = CurTime() - self.InitTime--(self.LastTime or CurTime())
+			self.BuildProgress = math.min(--[[self.BuildProgress +--]] timeDiff/self.BuildTime, 1)
+			self.Building = self.BuildProgress < 1
 			
 			local color = self:GetColor()
 			-- move base alpha to Balance.lua?
-			color.a = 100 + math.min(155 * self.BuildProgress, 155)
+			color.a = 100 + 155 * self.BuildProgress
 			self:SetColor(color)
 			
 			if self.Building then
-				-- move delay to Balance-lua?
-				timer.Simple( 0.1, function() if self.Build then self:Build() end end )
+				self:SheduleBuilding()
 			end
 		end
 		
 	end
-end
-
-function ENT:Think()
-	
-    self:NextThink(CurTime() + self.Delay)
-	return true
-	
 end
 
 
@@ -156,7 +155,6 @@ end
 
 
 function ENT:OnDeath()
-	print("death")
 	self.IsAlive = false
 	--self:BeforeDeathFunc()
 	

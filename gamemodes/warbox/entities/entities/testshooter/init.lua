@@ -9,8 +9,6 @@ function ENT:Initialize()
 	
 	BaseClass.Initialize( self )
 	
-	self.IsShooter = true
-	
 end
 
 -----------------------------------
