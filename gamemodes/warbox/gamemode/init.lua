@@ -4,12 +4,6 @@ include('wb_concmds.lua')
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 
-AddCSLuaFile( "cl_worldtips.lua" )
-AddCSLuaFile( "cl_scoreboard.lua" )
-AddCSLuaFile( "scoreboard/scoreboard.lua" )
-AddCSLuaFile( "scoreboard/team_frame.lua" )
-AddCSLuaFile( "scoreboard/player_line.lua" )
-
 
 function GM:PlayerConnect( name, ip )
 end

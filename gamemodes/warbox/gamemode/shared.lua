@@ -8,10 +8,24 @@ GM.Website 		= "needs a forum"
 --DeriveGamemode("sandbox")
 GM.IsSandboxDerived = true
 
+-- Add all clientside and shared files here
+if SERVER then
+	AddCSLuaFile( "balance.lua" )
+	AddCSLuaFile('team_extension.lua')
+	AddCSLuaFile('player_extension.lua')
+	AddCSLuaFile( "cl_worldtips.lua" )
+	AddCSLuaFile( "cl_scoreboard.lua" )
+	AddCSLuaFile( "scoreboard/scoreboard.lua" )
+	AddCSLuaFile( "scoreboard/team_frame.lua" )
+	AddCSLuaFile( "scoreboard/player_line.lua" )
+end
+
+-- Include shared files
 include('balance.lua')
 include('team_extension.lua')
 include('player_extension.lua')
 
+-- Create the initial teams
 -- inside or outside init?
 --		ID		Name			Color(	Red		Green	Blue	Alpha)		public
 WarboxTEAM( -1,		"Admin",		Color(	0,		0,		0,		255 ) )
