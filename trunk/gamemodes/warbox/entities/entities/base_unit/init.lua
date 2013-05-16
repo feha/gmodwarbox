@@ -41,6 +41,12 @@ function Base_Unit.Remove(unit)
 end
 
 
+-- Static helper functions
+function Base_Unit.IsValid( unit )
+	return Structure.IsValid(unit) and unit.IsUnit
+end
+
+
 -----------------------------------------------------------------------------------------
 
 

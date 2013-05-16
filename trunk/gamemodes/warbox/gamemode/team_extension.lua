@@ -42,17 +42,17 @@ end
 
 -- Score ----------------
 function meta:GetScore()
-	return self.Score
+	team.GetScore(self:GetIndex())
 end
 
 function meta:SetScore( score )
 	assert(type(score) == "number", "score has to be a number.")
-	self.Score = score
+	team.SetScore(self:GetIndex(), score)
 end
 
-function meta:AddScore()
+function meta:AddScore( score )
 	assert(type(score) == "number", "score has to be a number.")
-	self.Score = self.Score + score
+	team.AddScore(self:GetIndex(), score)
 end
 
 
