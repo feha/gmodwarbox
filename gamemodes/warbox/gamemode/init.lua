@@ -6,9 +6,11 @@ AddCSLuaFile( "cl_init.lua" )
 
 
 function GM:PlayerConnect( name, ip )
+	print("PlayerConnect")
 end
 
 function GM:PlayerDisconnect( name, ip )
+	print("PlayerDisconnect")
 end
 
 function GM:PlayerInitialSpawn( ply )
@@ -18,29 +20,31 @@ function GM:PlayerInitialSpawn( ply )
 end
 
 function GM:PlayerAuthed( ply, steamID, uniqueID )
+	print("PlayerAuthed")
 end
 
 function GM:PlayerSpawn(ply)
 	print("PlayerSpawn")
 	ply:RemoveAllAmmo()
 	
+	ply:Give( "weapon_physgun" )
 	ply:Give( "gmod_tool" )
 	ply:Give( "gmod_camera" )
-	ply:Give( "weapon_physgun" )
 	
-	ply:SwitchToDefaultWeapon()
+	ply:Give("wb_swep_order")
+	ply:SelectWeapon("wb_swep_order")
 end
 
-function GM:PlayerLoadout(ply)
-	print("PlayerLoadout")
-	ply:RemoveAllAmmo()
+-- function GM:PlayerLoadout(ply)
+	-- print("PlayerLoadout")
+	-- ply:RemoveAllAmmo()
 	
-	ply:Give( "gmod_tool" )
-	ply:Give( "gmod_camera" )
-	ply:Give( "weapon_physgun" )
+	-- ply:Give( "gmod_tool" )
+	-- ply:Give( "gmod_camera" )
+	-- ply:Give( "weapon_physgun" )
 	
-	ply:SwitchToDefaultWeapon()
-end
+	-- ply:SwitchToDefaultWeapon()
+-- end
 
 
 -- Will be used for pausing and such

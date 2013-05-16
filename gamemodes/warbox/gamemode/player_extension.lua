@@ -3,14 +3,17 @@ local PLAYER = FindMetaTable("Player")
 
 
 -- local function Loadout( ply )
-
+	
+	-- print("loadout")
+	
 	-- ply:RemoveAllAmmo()
 	
+	-- ply:Give( "weapon_physgun" )
 	-- ply:Give( "gmod_tool" )
 	-- ply:Give( "gmod_camera" )
-	-- ply:Give( "weapon_physgun" )
 	
-	-- self.Player:SwitchToDefaultWeapon()
+	-- ply:Give("wb_swep_order")
+	-- ply:SelectWeapon("wb_swep_order")
 
 -- end
 -- hook.Add( "PlayerLoadout", "warbox_loadout", Loadout)
@@ -156,6 +159,7 @@ if SERVER then
 	function PLAYER:SelectStart()
 		self.SelectionStartPos = self:GetEyeTrace().HitPos
 		print(self.SelectionStartPos)
+		self:EmitSound("Weapon_SMG1.Special2", 100, 100)
 	end
 
 	function PLAYER:SelectThink()
@@ -210,9 +214,8 @@ if SERVER then
 			end
 		end
 		
-		-- If selection is empty and player aimed at a unit, force it to the selection.
-		if self:GetUnitSelectionCount() == 0 and endEntity:IsValid()
-				and endEntity.IsUnit and endEntity.IsAlive then
+		-- If player aimed at a unit, force it to the selection.
+		if Base_Unit.IsValid(endEntity) and (select_non_mobile or endEntity.IsMobile) and (endEntity:GetTeam() == self:GetTeam() or self:IsAdminTeam()) then
 			self:AddUnitToSelection( endEntity )
 			if select_of_type then
 				table.insert( types_in_selection, v:GetUnitType() )
@@ -230,6 +233,9 @@ if SERVER then
 				self:AddUnitSelection( type_to_units[unitType] )
 			end
 		end
+		
+		
+		self:EmitSound("Weapon_SMG1.Special2", 100, 100)
 		
 	end
 
@@ -260,8 +266,11 @@ if SERVER then
 				end
 				
 				v.Patrolling = patrol
+				
 				print("ordered")
 			end
 		end
+		
+		self:EmitSound("Weapon_SMG1.Special2", 100, 100)
 	end
 end
