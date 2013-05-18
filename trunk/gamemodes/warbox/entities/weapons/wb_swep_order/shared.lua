@@ -160,19 +160,22 @@ end
 
 function SWEP:Holster()
 
-	self.isSelecting = nil
 	
 	if SERVER then
-		local ply = self:GetOwner()
-		
-		local shift	= ply:KeyDown(IN_SPEED)	-- add to selection
-		local use	= ply:KeyDown(IN_USE)	-- select non-mobile as well
-		local ctrl	= ply:KeyDown(IN_DUCK)	-- select all of type
-		--local alt	= ply:KeyDown(IN_WALK)
-		--local space	= ply:KeyDown(IN_JUMP)
-		
-		ply:SelectEnd(shift, use, duck, nil)
+		if self.isSelecting then
+			local ply = self:GetOwner()
+			
+			local shift	= ply:KeyDown(IN_SPEED)	-- add to selection
+			local use	= ply:KeyDown(IN_USE)	-- select non-mobile as well
+			local ctrl	= ply:KeyDown(IN_DUCK)	-- select all of type
+			--local alt	= ply:KeyDown(IN_WALK)
+			--local space	= ply:KeyDown(IN_JUMP)
+			
+			ply:SelectEnd(shift, use, duck, nil)
+		end
 	end
+	
+	self.isSelecting = nil
 	
 	return true
 	

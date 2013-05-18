@@ -6,9 +6,9 @@ cleanup.Register("Warbox")
 TOOL.ClientConVar[ "teamnumber" ] = "1"
 
 if (CLIENT) then
-	language.Add( "Tool_teststool_name", "infantry" )
-	language.Add( "Tool_teststool_desc", "Tool to spawn infantry" )
-	language.Add( "Tool_teststool_0", "Left-click to spawn unit. Right-click to spawn unit welded?" )
+	language.Add( "Tool_infantry_name", "infantry" )
+	language.Add( "Tool_infantry_desc", "Tool to spawn infantry" )
+	language.Add( "Tool_infantry_0", "Left-click to spawn unit. Right-click to spawn unit welded?" )
 	language.Add( "Undone_teststool", "Undone infantry" )
 	language.Add( "SBoxLimit_Warbox_Unit", "Personal Limit Reached" )
 end
@@ -51,7 +51,9 @@ end
 
 
 function TOOL:RightClick(trace)
-	if ( not self:GetSWEP():CheckLimit( "infantry" ) ) then return false end
+	if ( SERVER ) then
+		
+		if ( not self:GetSWEP():CheckLimit( "infantry" ) ) then return false end
 		
 		local ply = self:GetOwner()
 		local Pos = trace.HitPos
@@ -91,7 +93,7 @@ end
 
 
 function TOOL.BuildCPanel(CPanel)
-	CPanel:AddControl ("Header", { Text="#Tool_teststool_name", Description="#Tool_teststool_desc" })
+	CPanel:AddControl ("Header", { Text="#Tool_infantry_name", Description="#Tool_infantry_desc" })
 	
 	--local VGUI = vgui.Create("HelpButton",CPanel)
 	--	VGUI:SetTopic("teststool")
@@ -100,7 +102,7 @@ function TOOL.BuildCPanel(CPanel)
 	if LocalPlayer():IsAdmin() then
 		CPanel:AddControl ("Slider", {
 			Label = "Team Number (Only applies on Admin team)",
-			Command = "teststool_teamnumber",
+			Command = "infantry_teamnumber",
 			Type = "Integer",
 			Min = "1",
 			Max = "8"
