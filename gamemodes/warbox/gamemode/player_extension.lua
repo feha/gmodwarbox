@@ -145,13 +145,8 @@ if SERVER then
 		unit:CallOnRemove( "RemoveUnitFromSelection", PLAYER.RemoveUnitFromSelection, self )
 	end
 	function PLAYER:RemoveUnitFromSelection(unit)
-		for k,v in pairs(self.unitSelection) do
-			if (unit == v) then
-				self.unitSelection[v] = nil
-				v:RemoveCallOnRemove( "RemoveUnitFromSelection" )
-				break
-			end
-		end
+		self.unitSelection[unit] = nil
+		unit:RemoveCallOnRemove( "RemoveUnitFromSelection" )
 	end
 
 
