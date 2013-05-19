@@ -42,7 +42,7 @@ end
 
 -- Score ----------------
 function meta:GetScore()
-	team.GetScore(self:GetIndex())
+	return team.GetScore(self:GetIndex())
 end
 
 function meta:SetScore( score )
