@@ -17,7 +17,7 @@ function meta:GetIndex()
 end
 
 function meta:IsAdmin( )
-	return self.Index < 0
+	return not self.Public
 end
 
 -- Name ----------------

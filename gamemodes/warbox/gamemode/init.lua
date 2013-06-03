@@ -35,6 +35,30 @@ function GM:PlayerSpawn(ply)
 	ply:SelectWeapon("wb_swep_order")
 end
 
+-- TODO:
+-- Make it cost res, still have not decided if tools and hooks will handle it or the entities themselves.
+function GM:PlayerSpawnedProp( ply, model, ent)
+	local teem = ply:GetTeam()
+	
+	if not teem:IsAdmin() and ent:IsValid() then
+		prop = ents.Create("wb_structure_prop")
+			prop:SetModel( model )
+			prop:SetPos( ent:GetPos() )
+			prop:SetAngles( ent:GetAngles() )
+			prop:SetTeam( teem )
+		prop:Spawn()
+		prop:Activate()
+		
+		undo.Create( "wb_structure_prop" )
+			undo.AddEntity( prop )
+			undo.SetPlayer( ply )
+		undo.Finish()
+		
+		ent:Remove()
+	end
+	
+end
+
 -- function GM:PlayerLoadout(ply)
 	-- print("PlayerLoadout")
 	-- ply:RemoveAllAmmo()

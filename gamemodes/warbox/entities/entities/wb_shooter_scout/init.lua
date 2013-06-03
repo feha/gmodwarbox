@@ -15,7 +15,7 @@ end
 function ENT:Shoot( targetEntity )
 	local direction = self.TargetEntityDir
 	local pos = self:GetShootPos( direction )
-	local tarpos = targetEntity:GetPos()
+	local tarpos = targetEntity:NearestPoint(pos)--targetEntity:GetPos()
 	local color = self:GetTeam():GetColor()
 	
 	local fx_laser = EffectData()
