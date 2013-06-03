@@ -165,43 +165,24 @@ end
 function ENT:GetTarget()
 	local pos = self:GetPos()
 	if self.ForceTarget and Structure.IsValid(self.ForceTarget) then
-		local tarPos = self.ForceTarget:GetPos()
+		local tarPos = self.ForceTarget:GetPos() --self.ForceTarget:NearestPoint(pos)
 		local direction = tarPos - pos
+		local rangeSqr = LengthSqr(direction)
 		self.TargetEntityDir = direction
-		
-		if LengthSqr(direction) <= self.RangeSqr then
-			local filter = player.GetAll()
-			table.insert(filter, self)
-			local tracedata = {}
-				tracedata.start = self:GetShootPos( direction )
-				tracedata.endpos = tarPos
-				tracedata.filter = filter
-			local trace = util.TraceLine(tracedata)
-			
-			if trace.Entity == self.ForceTarget then
-				self.TargetEntity = self.ForceTarget
-				return self.TargetEntity
-			end
+		if self:GetCanHit(self.ForceTarget, tarPos, direction, rangeSqr) then
+			self.TargetEntity = self.ForceTarget
+			return self.TargetEntity
 		end
 	end
 	
 	if self.TargetEntity and Structure.IsValid(self.TargetEntity) then
-		local tarPos = self.TargetEntity:GetPos()
+		local tarPos = self.TargetEntity:GetPos() --self.TargetEntity:NearestPoint(pos)
 		local direction = tarPos - pos
+		local rangeSqr = LengthSqr(direction)
 		self.TargetEntityDir = direction
 		
-		if LengthSqr(direction) <= self.RangeSqr then
-			local filter = player.GetAll()
-			table.insert(filter, self)
-			local tracedata = {}
-				tracedata.start = self:GetShootPos( direction )
-				tracedata.endpos = tarPos
-				tracedata.filter = filter
-			local trace = util.TraceLine(tracedata)
-			
-			if trace.Entity == self.TargetEntity then
-				return self.TargetEntity
-			end
+		if self:GetCanHit(self.TargetEntity, tarPos, direction, rangeSqr) then
+			return self.TargetEntity
 		end
 	end
 	
@@ -213,7 +194,7 @@ function ENT:GetTarget()
 		if Structure.IsValid(v) and v ~= self then
 			if v:GetTeam() ~= teem and self:GetTargetPriority(v) > 0
 					and self:GetTargetPriority(v) >= self:GetTargetPriority(target) then
-				local tarPos = v:GetPos()
+				local tarPos = v:GetPos() --v:NearestPoint(pos)
 				local direction = tarPos - pos
 				local rangeSqr = LengthSqr(direction)
 				if self:GetCanHit(v, tarPos, direction, rangeSqr) then
@@ -262,7 +243,7 @@ function ENT:GetCanHit( target, tarpos, direction, rangeSqr )
 		table.insert(filter, self)
 		local tracedata = {}
 			tracedata.start = self:GetShootPos( direction )
-			tracedata.endpos = tarpos
+			tracedata.endpos = tarpos + direction
 			tracedata.filter = filter
 		local trace = util.TraceLine(tracedata)
 		

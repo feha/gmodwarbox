@@ -28,7 +28,7 @@ local base_structure = {
 	Model = "models/props_junk/watermelon01.mdl",
 	MaxHealth = 500, -- Default structure health
 	BuildTime = 10, -- seconds
-	DeathDamage = 50,
+	DeathDamage = 20,
 	DeathRadius = 100
 }
 Balance.base_structure = base_structure
@@ -40,7 +40,7 @@ local base_unit = {
 --	IsAi = false,
 --	IsMobile = false,
 --	IsShooter = false,
-	MaxHealth = 100 -- Default unit health
+	MaxHealth = 25 -- Default unit health
 }
 base_unit = table.Merge( table.Copy(base_structure), base_unit ) -- merge with baseclass
 Balance.base_unit = base_unit
@@ -48,7 +48,7 @@ Balance.base_unit = base_unit
 
 local base_mobile = {
 	IsMobile = true,
-	MaxHealth = 50, -- Default mobile unit health
+	MaxHealth = 10, -- Default mobile unit health
 	Speed = 100,
 	MoveRange = 42
 }
@@ -58,7 +58,7 @@ Balance.base_mobile = base_mobile
 
 local base_ai = {
 	IsAi = true,
-	MaxHealth = 100, -- Default ai unit health
+	MaxHealth = 10, -- Default ai unit health
 	Delay = 0.250, -- seconds
 	Range = 500,
 	Priority = {
@@ -71,7 +71,7 @@ Balance.base_ai = base_ai
 
 
 local base_mobile_ai = {
-	MaxHealth = 50, -- Default ai unit health
+	MaxHealth = 5, -- Default ai unit health
 	Delay = 0.500, -- seconds
 	Range = 250,
 	Speed = 50,
@@ -89,8 +89,8 @@ local wb_structure_prop = {
 	SizeRatio = 0.796,
 	MaxMaxHealth = 2000, -- Default structure health
 	BuildTime = 1, -- seconds
-	DeathDamage = 0,
-	DeathRadius = 0
+	DeathDamage = 10,
+	DeathRadius = 100
 }
 wb_structure_prop = table.Merge( table.Copy(base_structure), wb_structure_prop )
 Balance.wb_structure_prop = wb_structure_prop
@@ -98,12 +98,12 @@ Balance.wb_structure_prop = wb_structure_prop
 
 local wb_shooter_scout = {
 	IsShooter = true,
-	MaxHealth = 50, -- Default ai unit health
+	MaxHealth = 16, -- Default ai unit health
 	Delay = 1.200, -- seconds
 	Range = 250,
 	Speed = 75,
 	MoveRange = 50,
-	Damage = 10
+	Damage = 3
 }
 wb_shooter_scout = table.Merge( table.Copy(base_mobile_ai), wb_shooter_scout )
 Balance.wb_shooter_scout = wb_shooter_scout
@@ -111,14 +111,14 @@ Balance.wb_shooter_scout = wb_shooter_scout
 
 local wb_shooter_infantry = {
 	IsShooter = true,
-	MaxHealth = 100, -- Default ai unit health
+	MaxHealth = 25, -- Default ai unit health
 	Delay = 0.500, -- seconds
 	Speed = 50,
 	MoveRange = 50,
 	Range = 500,
 	NumberOfBullets = 1,
 	Spread = Vector(0.05, 0.05, 0.05),
-	Damage = 10,
+	Damage = 5,
 	BulletForce = 1,
 }
 wb_shooter_infantry = table.Merge( table.Copy(base_mobile_ai), wb_shooter_infantry )

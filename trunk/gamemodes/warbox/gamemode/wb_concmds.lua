@@ -4,7 +4,7 @@ local function joinTeam(ply, cmd, args)
 	print(cmd)
 	local teamIndex = tonumber(args[1])
 	print(teamIndex)
-	if teamIndex and (WarboxTEAM.GetTeam(teamIndex) and WarboxTEAM.GetTeam(teamIndex).Public or ply:IsAdminOrSuper()) then
+	if teamIndex and (WarboxTEAM.GetTeam(teamIndex) and WarboxTEAM.GetTeam(teamIndex):IsAdmin() or ply:IsAdminOrSuper()) then
 		ply:SetTeam(teamIndex)
 	end
 end
