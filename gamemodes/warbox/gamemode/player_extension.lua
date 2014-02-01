@@ -107,6 +107,7 @@ if SERVER then
 
 	function PLAYER:GetUnitSelection()
 		
+		self.unitSelection = self.unitSelection or {}
 		return table.Copy(self.unitSelection) or {}
 		
 	end
@@ -140,11 +141,13 @@ if SERVER then
 		assert(unit.CallOnRemove, "unit.CallOnRemove is nil. If you call Base_Unit.Remove(unit) manually, just create an empty function.")
 		assert(type(unit.CallOnRemove) == "function", "Unit.CallOnRemove is not a function. If you call PLAYER:Remove(unit) manually, just create an empty function.")
 		
+		self.unitSelection = self.unitSelection or {}
 		self.unitSelection[unit] = unit
 		-- Will this be needed? I intend to ensure stuff is alive before ordering anyway...
 		unit:CallOnRemove( "RemoveUnitFromSelection", PLAYER.RemoveUnitFromSelection, self )
 	end
 	function PLAYER:RemoveUnitFromSelection(unit)
+		self.unitSelection = self.unitSelection or {}
 		self.unitSelection[unit] = nil
 		unit:RemoveCallOnRemove( "RemoveUnitFromSelection" )
 	end

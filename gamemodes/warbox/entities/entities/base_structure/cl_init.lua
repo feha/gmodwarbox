@@ -24,15 +24,15 @@ function ENT:Draw()
 		if self:GetNetworkedInt("WB_BuildProgress") < 1  then
 			local buildprogress = math.floor(self:GetNetworkedInt("WB_BuildProgress") * 100)
 			AddWorldTip( nil,
-						GameStrings:GetString(self:GetClass()) .. "\n"
-						.. GameStrings:GetString("building") .. ": " .. buildprogress .. "%",
+						GameStrings.GetString(self:GetClass()) .. "\n"
+						.. GameStrings.GetString("building") .. ": " .. buildprogress .. "%",
 						nil, self:GetPos(), self )
 		else
 			local health = self:GetNetworkedInt("WB_CurHealth")
 			local maxhealth = self:GetNetworkedInt("WB_MaxHealth")
 			AddWorldTip( nil,
-						GameStrings:GetString(self:GetClass()) .. "\n"
-						.. GameStrings:GetString("health") .. ": " .. health .. "/" .. maxhealth,
+						GameStrings.GetString(self:GetClass()) .. "\n"
+						.. GameStrings.GetString("health") .. ": " .. health .. "/" .. maxhealth,
 						nil, self:GetPos(), self  )
 		end
 	end

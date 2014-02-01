@@ -29,10 +29,9 @@ function TOOL:LeftClick(trace)
 		end
 		
 		if (trace.Hit and not trace.HitNoDraw) then
-			unit = ents.Create("wb_shooter_scout")
+			unit = ents.Create("wb_warprop_capturepoint")
 				unit:SetPos( trace.HitPos + trace.HitNormal )
 				unit:SetAngles(Normal:Angle())
-				unit:SetTeam( teem )
 			unit:Spawn()
 			unit:Activate()
 			

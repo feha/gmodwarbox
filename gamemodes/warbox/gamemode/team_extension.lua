@@ -6,6 +6,11 @@ function WarboxTEAM.GetTeam( index )
 	return teams[index]
 end
 
+function WarboxTEAM.IsTeam( teem )
+	if teem == nil then return false end
+	return getmetatable(teem) == getmetatable(WarboxTEAM)
+end
+
 
 local meta = {}
 meta.__index = meta
