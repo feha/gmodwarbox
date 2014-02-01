@@ -22,22 +22,25 @@ GameStrings.SetGameStrings = SetGameStrings
 
 
 local function GetString(str)
-	return strings[GameStrings.current][str]
+	return strings[GameStrings.current][str] or "MISSING GAMESTRING"
 end
 GameStrings.GetString = GetString
 
 
 -- Decode a gamestring file into a table of gamestrings
 local function Decode( source_string, target_table, filename )
-	
 	if source_string ~= "" then
 		local rows = string.Explode( "\n", source_string, true )
 		
 		for k,row in pairs(rows) do
-			if row ~= "" and string.find(row, "^[^--]") then
-				local keyvalue = string.Explode( "=", row, true )
-				assert(#keyvalue == 2, "Decode - Invalid format of row: [" .. tostring(k) .. ", \"".. row .."\"] in file: " .. filename)
-				target_table[keyvalue[1]] = keyvalue[2]
+			local _, _, left, right = string.find( row, "[^\"]*\"([^\"\n\r]*)\".*=.*\"([^\"\n\r]*)\"[^\"]*" )
+			local _, _, left2, right2 = string.find( row, "[\t%s]*([^\t%s]+.*[^\t%s]+)[\t%s]*=[\t%s]*([^\t%s]+.*[^\t%s]+)[\t%s]*" )
+			if left and right then
+				print(left .. "=" ..right)
+				target_table[left] = right
+			elseif left2 and right2 then
+				print(left2 .. "=" ..right2)
+				target_table[left2] = right2
 			end
 		end
 		
@@ -48,11 +51,11 @@ end
 
 local function DecodeFile( filename, target_table )
 	
-	if not file.Exists( "gamestrings/" .. filename .. ".txt" , "DATA" ) then
-		error( "DecodeFile - Tried to load non-existent gamestrings from file: " .. filename )
-	end
+	--if not file.Exists( "WarBox/content/data/gamestrings/" .. filename .. ".txt" , "lcl" ) then
+	--	error( "DecodeFile - Tried to load non-existent gamestrings from file: " .. filename )
+	--end
 	
-	local str = file.Read( "gamestrings/" .. filename .. ".txt" , "DATA" )
+	local str = file.Read( "WarBox/content/data/gamestrings/" .. filename .. ".txt" , "lcl" )
 	
 	target_table[filename] = {}
 	Decode(str, target_table[filename], filename)
@@ -61,13 +64,13 @@ end
 
 
 -- Recursivelly finds all files in a directory and adds them to target table.
-local function FindListOfGameStrings( directory, target_table )
+local function FindListOfGameStrings( directory, path, target_table )
 	
-	if not file.IsDir( directory , "DATA" ) then
-		error( "FindListOfGameStrings - Input is not a Directory: " .. directory )
+	if not file.IsDir( directory , path ) then
+		error( "FindListOfGameStrings - Not a directory! directory: " .. directory .. " & path: " .. path )
 	end
 	
-	local files, directories = file.Find( directory, "DATA" )
+	local files, directories = file.Find( directory .. "/*.txt", path )
 	
 	for _,filename in pairs(files) do
 		if filename ~= "" then
@@ -80,6 +83,6 @@ local function FindListOfGameStrings( directory, target_table )
 	end
 	
 end
-FindListOfGameStrings( "gamestrings", GameStrings.files )
+FindListOfGameStrings( "WarBox/content/data/gamestrings", "lcl", GameStrings.files )
 DecodeFile( GameStrings.default, strings )
 

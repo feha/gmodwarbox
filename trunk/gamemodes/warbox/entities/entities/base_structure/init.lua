@@ -22,7 +22,7 @@ function Structure.GetTable()
 end
 function Structure.Add(structure)
 	assert(structure.CallOnRemove, "structure.CallOnRemove is nil. If you call Structure.Remove(structure) manually, just create an empty function.")
-	assert(type(structure.CallOnRemove) == "function", "structure.CallOnRemove is not a function. If you call Base_Unit.Remove(structure) manually, just create an empty function.")
+	assert(type(structure.CallOnRemove) == "function", "structure.CallOnRemove is not a function. If you call Structure.Remove(structure) manually, just create an empty function.")
 	
 	table.insert( structures, structure )
 	structure:CallOnRemove( "RemoveStructure", Structure.Remove )
@@ -68,12 +68,6 @@ function ENT:Initialize()
 	
 	self.IsAlive		=	true
 	self.CurHealth		=	self.MaxHealth
-	self.Building		=	true
-	self.BuildProgress	=	0
-	self.InitTime = CurTime()
-	
-	self:SheduleBuilding()
-	--self:Build()
 	
 	-- Networked variables
 	self:SetNetworkedInt("WB_MaxHealth", math.floor(self.MaxHealth))

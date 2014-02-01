@@ -23,7 +23,7 @@ end
 function WarProp.Add(warprop)
 	assert(warprop, "warprop is nil, its bad idea to add it to he WarProp table.")
 	assert(warprop.CallOnRemove, "warprop.CallOnRemove is nil. If you call WarProp.Remove(warprop) manually, just create an empty function.")
-	assert(type(warprop.CallOnRemove) == "function", "warprop.CallOnRemove is not a function. If you call Base_Unit.Remove(warprop) manually, just create an empty function.")
+	assert(type(warprop.CallOnRemove) == "function", "warprop.CallOnRemove is not a function. If you call WarProp.Remove(warprop) manually, just create an empty function.")
 	
 	table.insert( warprops, warprop )
 	warprop:CallOnRemove( "RemoveWarProp", WarProp.Remove )
@@ -71,12 +71,10 @@ function ENT:Initialize()
 	
 	WarProp.Add(self)
 	
-	self.IsAlive		=	true
-	self.CurHealth		=	self.MaxHealth
-	self.Building		=	true
-	self.BuildProgress	=	0
-	self.InitTime = CurTime()
-	self.LastBuild = self.InitTime
+	self.Building		= self.BuildTime > 0 and true
+	self.BuildProgress	= self.BuildTime > 0 and 0 or 1
+	self.InitTime		= CurTime()
+	self.LastBuild		= self.InitTime
 	
 	-- Networked variables
     self:SetNetworkedFloat("WB_BuildProgress", self.BuildProgress)
@@ -102,11 +100,12 @@ function ENT:Initialize()
 	end
 	self:SetColor( self:GetTeam().Color )
 	local color = self:GetColor()
-	color.a = 100-- move base alpha to Balance.lua?
+	color.a = 100 + 155 * self.BuildProgress -- move base alpha to Balance.lua?
 	self:SetColor(color)
 	
-	
-	self:SheduleBuilding()
+	if self.Building then
+		self:SheduleBuilding()
+	end
 	
 end
 

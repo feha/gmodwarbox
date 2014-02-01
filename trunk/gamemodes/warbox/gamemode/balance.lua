@@ -28,7 +28,7 @@ local base_warprop = {
 	Model = "models/props_junk/watermelon01.mdl",
 	BuildTime = 10, -- seconds
 }
-Balance.base_structure = base_structure
+Balance.base_warprop = base_warprop
 
 
 local base_structure = {
@@ -38,6 +38,7 @@ local base_structure = {
 	DeathDamage = 20,
 	DeathRadius = 100
 }
+base_structure = table.Merge( table.Copy(base_warprop), base_structure ) -- merge with baseclass
 Balance.base_structure = base_structure
 
 
@@ -49,7 +50,7 @@ local base_unit = {
 --	IsShooter = false,
 	MaxHealth = 25 -- Default unit health
 }
-base_unit = table.Merge( table.Copy(base_structure), base_unit ) -- merge with baseclass
+base_unit = table.Merge( table.Copy(base_structure), base_unit )
 Balance.base_unit = base_unit
 
 
@@ -89,6 +90,19 @@ base_mobile_ai = table.Merge( table.Copy(base_ai), base_mobile_ai )
 Balance.base_mobile_ai = base_mobile_ai
 
 
+-- warprops
+local wb_warprop_capturepoint = {
+	Model = "models/props_trainstation/tracksign01.mdl",
+	BuildTime = 0,
+	Range = 250,
+	Delay = 0.5,
+	Income = 1000,
+}
+wb_warprop_capturepoint = table.Merge( table.Copy(base_structure), wb_warprop_capturepoint)
+Balance.wb_warprop_capturepoint = wb_warprop_capturepoint
+
+
+-- structures
 local wb_structure_prop = {
 	Model = "",
 	MassRatio = 2.5,
@@ -103,6 +117,7 @@ wb_structure_prop = table.Merge( table.Copy(base_structure), wb_structure_prop )
 Balance.wb_structure_prop = wb_structure_prop
 
 
+-- shooters
 local wb_shooter_scout = {
 	IsShooter = true,
 	MaxHealth = 16,

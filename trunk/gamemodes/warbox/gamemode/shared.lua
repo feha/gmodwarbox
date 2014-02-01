@@ -10,9 +10,14 @@ GM.IsSandboxDerived = true
 
 -- Add all clientside and shared files here
 if SERVER then
+	-- .txt files
+	AddCSLuaFile( "data/gamestrings/english.txt" )
+	
+	-- .lua files
 	AddCSLuaFile( "balance.lua" )
-	AddCSLuaFile('team_extension.lua')
-	AddCSLuaFile('player_extension.lua')
+	AddCSLuaFile( "gamestrings.lua" )
+	AddCSLuaFile( "team_extension.lua" )
+	AddCSLuaFile( "player_extension.lua" )
 	AddCSLuaFile( "cl_scoreboard.lua" )
 	AddCSLuaFile( "scoreboard/scoreboard.lua" )
 	AddCSLuaFile( "scoreboard/team_frame.lua" )
@@ -20,13 +25,15 @@ if SERVER then
 end
 
 -- Include shared files
-include('balance.lua')
-include('team_extension.lua')
-include('player_extension.lua')
+include( 'balance.lua' )
+include( 'gamestrings.lua' )
+include( 'team_extension.lua' )
+include( 'player_extension.lua' )
 
 -- Create the initial teams
 -- inside or outside init?
 --		ID		Name			Color(	Red		Green	Blue	Alpha)		public
+WarboxTEAM( -2,		"Neutral",		Color(	255,	255,	255,	255 ) )
 WarboxTEAM( -1,		"Admin",		Color(	0,		0,		0,		255 ) )
 WarboxTEAM( 0,		"Spectator",	Color(	255,	255,	255,	255 ),	true )
 WarboxTEAM( 1,		"Red",			Color(	255,	0,		0,		255 ),	true )
