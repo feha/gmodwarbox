@@ -1,6 +1,6 @@
 include("shared.lua")
 
-DEFINE_BASECLASS( "base_warprop" )
+DEFINE_BASECLASS( "base_anim" )
 
 -- local references to commonly used functions and libraries
 local v = FindMetaTable("Vector")
@@ -28,12 +28,10 @@ function ENT:Draw()
 						.. GameStrings:GetString("building") .. ": " .. buildprogress .. "%",
 						nil, self:GetPos(), self )
 		else
-			local health = self:GetNetworkedInt("WB_CurHealth")
-			local maxhealth = self:GetNetworkedInt("WB_MaxHealth")
 			AddWorldTip( nil,
 						GameStrings:GetString(self:GetClass()) .. "\n"
-						.. GameStrings:GetString("health") .. ": " .. health .. "/" .. maxhealth,
-						nil, self:GetPos(), self  )
+						.. GameStrings:GetString("owner") .. ": " .. self:GetTeam():GetName(),
+						nil, self:GetPos(), self )
 		end
 	end
 	

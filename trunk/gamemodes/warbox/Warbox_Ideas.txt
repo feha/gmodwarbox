@@ -11,3 +11,35 @@ The camera is moved by wasd keys, but remove any height-direction from it.
 The GUI will look rts-ish, where you control with an unlocked mouse-pointer.
 Lock the q-menu so it cant even be brought up while in this mode, and use hud buttons instead?
 q-menu could bring up a larger version of the map instead?
+
+
+
+shorter TODO:
+
+- A system to place and save entities on the map, which can be loaded on map-load.
+ think wmrts variant system, you cant have a gamemode that requires admins 24/7 or recreating the map everytime.
+ Could be solved by mapper placing stuff, but letting it be done ingame is more versatile.
+
+- A research tree to slow down access to certain units (and possible target to remove acces for enemy)
+
+- Entities you capture for res
+
+- A res harvesting symbiosis between 2 or more entities
+
+- A Base used to determine a loss, and territory system limiting area of influence
+
+- A cannon/splash unit that shoot explosive shells
+
+- A sniper class of unit
+
+- A "meelee" kind of unit
+
+- An anti-stationary kind of unit (maybe similar to wmrts laser?)
+
+- A "medic" kind of unit. stationary? aoe? continuous like tf2?
+
+- Anti air. flak like wmrts? splash damage really is preferably for something
+ like AA since the idea is to cripple flight systems, which in gmod often get hidden.
+ Could possibly also be something like instant laser that can ignore blocking props,
+ but this would not work well against flight spam...
+
