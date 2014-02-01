@@ -22,12 +22,19 @@ Balance.player = player
 
 
 -- Base-classes
-local base_structure = {
-	IsStructure = true,
+local base_warprop = {
+	IsWarProp = true,
 	HasGravity = true,
 	Model = "models/props_junk/watermelon01.mdl",
-	MaxHealth = 500, -- Default structure health
 	BuildTime = 10, -- seconds
+}
+Balance.base_structure = base_structure
+
+
+local base_structure = {
+	IsStructure = true,
+	MaxHealth = 500, -- Default structure health
+	BuildRegen = 100, -- Health regenerated per second if damaged while being built
 	DeathDamage = 20,
 	DeathRadius = 100
 }
@@ -98,8 +105,9 @@ Balance.wb_structure_prop = wb_structure_prop
 
 local wb_shooter_scout = {
 	IsShooter = true,
-	MaxHealth = 16, -- Default ai unit health
-	Delay = 1.200, -- seconds
+	MaxHealth = 16,
+	BuildRegen = 100,
+	Delay = 1.200,
 	Range = 250,
 	Speed = 75,
 	MoveRange = 50,
@@ -111,8 +119,9 @@ Balance.wb_shooter_scout = wb_shooter_scout
 
 local wb_shooter_infantry = {
 	IsShooter = true,
-	MaxHealth = 25, -- Default ai unit health
-	Delay = 0.500, -- seconds
+	MaxHealth = 25,
+	BuildRegen = 100,
+	Delay = 0.500,
 	Speed = 50,
 	MoveRange = 50,
 	Range = 500,

@@ -1,0 +1,19 @@
+-- Mostly used for worldtips shown when aiming at entities
+building=Building
+owner=Owner
+health=Health
+maxhealth = Max Health
+
+-- Names usually used in text for the entities
+-- The base entities, something is likely wrong if those strings are actually used in-game
+base_warprop=WarProp
+base_structure=Structure
+base_ai=Intelligent Structure
+base_mobile=Mobile Structure
+base_mobile_ai=Mobile Intelligent Structure
+base_unit=Unit
+
+-- other entities
+wb_structure_prop=Prop
+wb_shooter_scout=Scout
+wb_shooter_infantry=Infantry
