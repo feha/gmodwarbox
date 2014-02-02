@@ -20,9 +20,13 @@ shorter TODO:
  think wmrts variant system, you cant have a gamemode that requires admins 24/7 or recreating the map everytime.
  Could be solved by mapper placing stuff, but letting it be done ingame is more versatile.
 
-- A research tree to slow down access to certain units (and possible target to remove acces for enemy)
+- A message system to print messages for players, teams and all ("you dont have enough res" and such)
 
-- Entities you capture for res
+- A chatcmd system, for joining teams and possibly something more
+
+- Uuhhhhh... Its starting to become more urgent that I actually create some sort of hud I think...
+
+- A research tree to slow down access to certain units (and possible target to remove acces for enemy)
 
 - A res harvesting symbiosis between 2 or more entities
 

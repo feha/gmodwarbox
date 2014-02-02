@@ -19,6 +19,18 @@ local PLAYER = FindMetaTable("Player")
 -- hook.Add( "PlayerLoadout", "warbox_loadout", Loadout)
 
 
+function PLAYER:Message( message, color )
+	
+	if not color then
+		color = rainbow["default"]
+	elseif
+		type( color ) == "string" then color = Balance.colors[string.lower(color)]
+	end
+	chat.AddText( self, Balance.colors["default"], "[", self:GetTeam():GetColor(), "Warbox", Balance.colors["default"], "]  ", color, message )
+	
+end
+
+
 local oldSetTeam = PLAYER.SetTeam
 function PLAYER:SetTeam( teamIndex )
 	
@@ -64,26 +76,45 @@ end
 
 
 -- Resources ----------------
-PLAYER.Res = 0
-PLAYER.MaxRes = Balance.player.MaxRes
-
 function PLAYER:GetRes( )
-	return math.floor( self.Res )
+	return math.floor( self.Res or 0 )
 end
 
--- These three should become shared using net-lib or networked variables (or deaths/frags) to share data
+-- I dont see any good reason for clients to be allowed to update the res on the server,
+-- so I'm going to leave it one-way like this.
 function PLAYER:SetRes( res )
-	self.Res = math.min( res, self.MaxRes )
+	self.Res = math.min( res, Balance.player.MaxRes  )
+	
+	if SERVER then
+		net.Start( "PlayerRes" )
+			net.WriteEntity( self )
+			net.WriteFloat( res )
+		net.End( ply )
+	end
+end
+if SERVER then
+	util.AddNetworkString( "PlayerRes" )
+else
+	net.Receive( "PlayerRes", function( )
+			ply = net.ReadEntity()
+			res = net.ReadFloat()
+			ply:SetRes( res )
+	end )
 end
 
 function PLAYER:AddRes( res )
-	self:SetRes( self.Res + res )
+	self:SetRes( self:GetRes() + res )
 end
 
 function PLAYER:ConsumeRes( cost )
-	if self.Res < cost then return false end
+	if self:GetRes() < cost then return false end
 	
-	self:SetRes( self.Res - cost )
+	self:SetRes( self:GetRes() - cost )
+	
+	-- Actually supposed to be another kind of message system used for this kind of stuff.
+	-- Something akin to warmelons I think ,where its lines of text that fade out over time
+	self:Message( string.format(GameStrings.GetString("you_lost_res"), cost ), "nicered" )
+	
 	return true
 end
 

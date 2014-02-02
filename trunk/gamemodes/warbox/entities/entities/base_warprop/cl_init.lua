@@ -21,18 +21,17 @@ function ENT:Draw()
 	-- health and building worldtip
 	local ply = LocalPlayer()
 	if ply:GetEyeTrace().Entity == self and LengthSqr(ply:GetPos() - self:GetPos()) < Balance.notsorted.WorldTipDisplayRangeSqr then
-		if self:GetNetworkedInt("WB_BuildProgress") < 1  then
-			local buildprogress = math.floor(self:GetNetworkedInt("WB_BuildProgress") * 100)
-			AddWorldTip( nil,
-						GameStrings.GetString(self:GetClass()) .. "\n"
-						.. GameStrings.GetString("building") .. ": " .. buildprogress .. "%",
-						nil, self:GetPos(), self )
-		else
-			AddWorldTip( nil,
-						GameStrings.GetString(self:GetClass()) .. "\n"
-						.. GameStrings.GetString("owner") .. ": " .. self:GetTeam():GetName(),
-						nil, self:GetPos(), self )
+		
+		local str = GameStrings.GetString(self:GetClass()) .. "\n"
+					.. string.format( GameStrings.GetString("owner"), self:GetTeam():GetName() ) .. "\n"
+		
+		local buildprogress = self:GetNetworkedInt("WB_BuildProgress")
+		if buildprogress < 100  then
+			str =	str .. string.format( GameStrings.GetString("building"), buildprogress )
 		end
+		
+		AddWorldTip( nil, str, nil, self:GetPos(), self )
+		
 	end
 	
 end

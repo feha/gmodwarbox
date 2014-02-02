@@ -1,6 +1,7 @@
 
 -- Table used for 'static' functions
 GameStrings = {}
+GameStrings.directory = "gamemodes/Warbox/content/data/gamestrings"
 GameStrings.default = "english"
 GameStrings.current = GameStrings.default
 
@@ -22,6 +23,7 @@ GameStrings.SetGameStrings = SetGameStrings
 
 
 local function GetString(str)
+	strings[GameStrings.current] = strings[GameStrings.current] or {}
 	return strings[GameStrings.current][str] or "MISSING GAMESTRING"
 end
 GameStrings.GetString = GetString
@@ -33,13 +35,11 @@ local function Decode( source_string, target_table, filename )
 		local rows = string.Explode( "\n", source_string, true )
 		
 		for k,row in pairs(rows) do
-			local _, _, left, right = string.find( row, "[^\"]*\"([^\"\n\r]*)\".*=.*\"([^\"\n\r]*)\"[^\"]*" )
+			local _, _, left, right = string.find( row, "[\t%s]*([^\t%s]+.*[^\t%s]+)[\t%s]*=[^\"]*\"([^\n\r]+)\"[^\"]*" )
 			local _, _, left2, right2 = string.find( row, "[\t%s]*([^\t%s]+.*[^\t%s]+)[\t%s]*=[\t%s]*([^\t%s]+.*[^\t%s]+)[\t%s]*" )
 			if left and right then
-				print(left .. "=" ..right)
 				target_table[left] = right
 			elseif left2 and right2 then
-				print(left2 .. "=" ..right2)
 				target_table[left2] = right2
 			end
 		end
@@ -51,11 +51,11 @@ end
 
 local function DecodeFile( filename, target_table )
 	
-	--if not file.Exists( "WarBox/content/data/gamestrings/" .. filename .. ".txt" , "lcl" ) then
+	--if not file.Exists( "WarBox/content/data/gamestrings/" .. filename .. ".txt" , "GAME" ) then
 	--	error( "DecodeFile - Tried to load non-existent gamestrings from file: " .. filename )
 	--end
 	
-	local str = file.Read( "WarBox/content/data/gamestrings/" .. filename .. ".txt" , "lcl" )
+	local str = file.Read( GameStrings.files[filename], "GAME" )
 	
 	target_table[filename] = {}
 	Decode(str, target_table[filename], filename)
@@ -67,14 +67,16 @@ end
 local function FindListOfGameStrings( directory, path, target_table )
 	
 	if not file.IsDir( directory , path ) then
-		error( "FindListOfGameStrings - Not a directory! directory: " .. directory .. " & path: " .. path )
+		-- Bugged during map load, for some reason always returns false then, so lets retry until it works
+		timer.Simple( 0.1, function() FindListOfGameStrings( directory, path, target_table ) end )
+		error( "FindListOfGameStrings - Not a directory! directory: \"" .. directory .. "\" & path: \"" .. path .. "\"" )
 	end
 	
 	local files, directories = file.Find( directory .. "/*.txt", path )
-	
 	for _,filename in pairs(files) do
-		if filename ~= "" then
-			table.insert( target_table, directory .. "/" .. string.GetFileFromFilename(filename) )
+		local name = ({string.find(filename, "([^/]+).txt$")})[3] -- "dirs/name.txt" -> "name"
+		if name ~= "" then
+			target_table[name] = directory .. "/" .. filename
 		end
 	end
 	
@@ -82,7 +84,9 @@ local function FindListOfGameStrings( directory, path, target_table )
 		FindListOfGameStrings( directory .. "/" .. dir )
 	end
 	
+	-- Load the default
+	DecodeFile( GameStrings.default, strings )
+	
 end
-FindListOfGameStrings( "WarBox/content/data/gamestrings", "lcl", GameStrings.files )
-DecodeFile( GameStrings.default, strings )
+FindListOfGameStrings( GameStrings.directory, "GAME", GameStrings.files )
 

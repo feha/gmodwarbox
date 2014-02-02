@@ -76,6 +76,7 @@ function ENT:Initialize()
 end
 
 
+-- regen some health if damaged while being built
 function ENT:OnBuild(deltatime)
 	if self.CurHealth < self.MaxHealth then
 		math.min( self.CurHealth + self.BuildRegen*deltatime, self.MaxHealth )
