@@ -238,7 +238,6 @@ end
 
 function ENT:GetCanHit( target, tarpos, direction, rangeSqr )
 	if rangeSqr <= self.RangeSqr then
-		print("in range")
 		local filter = player.GetAll()
 		table.insert(filter, self)
 		local tracedata = {}
@@ -247,9 +246,6 @@ function ENT:GetCanHit( target, tarpos, direction, rangeSqr )
 			tracedata.filter = filter
 		local trace = util.TraceLine(tracedata)
 		
-		print(self)
-		print(target)
-		print(trace.Entity)
 		return trace.Entity == target
 	end
 	

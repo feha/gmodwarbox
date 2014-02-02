@@ -9,13 +9,29 @@ Balance = {}
 local notsorted = {
 	WorldTipDisplayRange = 250, -- Range used to limit how far a unit displays its WorldTip
 	WorldTipDisplayRangeSqr = math.pow(250, 2),
-	WorlTipUpdateRate = 0.100 -- seconds
+	WorlTipUpdateRate = 0.100, -- seconds
+	PaydayDelay = 60,
 }
 Balance.notsorted = notsorted
 
+local rainbow = {
+	default		= Color(234,	234,	234,	255 ),
+	white		= Color(255,	255,	255,	255 ),
+	red			= Color(255,	0,		0,		255 ),
+	green		= Color(0,		255,	0,		255 ),
+	blue		= Color(50,		222,	255,	255 ),
+	darkred		= Color(150,	0,		0,		255 ),
+	darkgreen	= Color(0,		150,	0,		255 ),
+	darkblue	= Color(0,		0,		150,	255 ),
+	nicered		= Color(211,	0,		0,		255 ),
+	nicegreen	= Color(0,		200,	0,		255 ),
+	niceblue	= Color(0,		75,		200,	255 ),
+}
+Balance.colors = rainbow
+
 
 local player = {
-	StartRes = 500, -- Default player start resources
+	StartRes = 1000, -- Default player start resources
 	MaxRes = 200000
 }
 Balance.player = player
@@ -96,7 +112,8 @@ local wb_warprop_capturepoint = {
 	BuildTime = 0,
 	Range = 250,
 	Delay = 0.5,
-	Income = 1000,
+	TimeToCapture = 20, -- A single regular unit (no multiplier) takes 20 seconds to capture a point
+	Income = 1000
 }
 wb_warprop_capturepoint = table.Merge( table.Copy(base_structure), wb_warprop_capturepoint)
 Balance.wb_warprop_capturepoint = wb_warprop_capturepoint
@@ -122,11 +139,13 @@ local wb_shooter_scout = {
 	IsShooter = true,
 	MaxHealth = 16,
 	BuildRegen = 100,
+	Cost = 50,
 	Delay = 1.200,
 	Range = 250,
 	Speed = 75,
 	MoveRange = 50,
-	Damage = 3
+	Damage = 3,
+	CaptureMultiplier = 2
 }
 wb_shooter_scout = table.Merge( table.Copy(base_mobile_ai), wb_shooter_scout )
 Balance.wb_shooter_scout = wb_shooter_scout
@@ -136,6 +155,7 @@ local wb_shooter_infantry = {
 	IsShooter = true,
 	MaxHealth = 25,
 	BuildRegen = 100,
+	Cost = 100,
 	Delay = 0.500,
 	Speed = 50,
 	MoveRange = 50,

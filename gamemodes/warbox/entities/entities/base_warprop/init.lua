@@ -50,7 +50,7 @@ function WarProp.UpdateNetworkedVariables( )
 		local entity = ply:GetEyeTrace().Entity
 		if WarProp.IsValid( entity ) and LengthSqr(ply:GetPos() - entity:GetPos()) < Balance.notsorted.WorldTipDisplayRangeSqr then
 			-- Might change from networked vars to something like net-lib
-			entity:SetNetworkedFloat("WB_BuildProgress", entity.BuildProgress)
+			entity:SetNetworkedInt("WB_BuildProgress", math.floor( entity.BuildProgress * 100 ) )
 		end
 	end
 end
@@ -77,7 +77,7 @@ function ENT:Initialize()
 	self.LastBuild		= self.InitTime
 	
 	-- Networked variables
-    self:SetNetworkedFloat("WB_BuildProgress", self.BuildProgress)
+    self:SetNetworkedInt("WB_BuildProgress", math.floor( self.BuildProgress * 100 ) )
 	
 	-- make it static and change to physics in subclasses when needed?
 	self:SetModel( self.Model )

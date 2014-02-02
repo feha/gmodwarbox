@@ -1,16 +1,3 @@
-WarboxTEAM = {}
-
-local teams = {}
-
-function WarboxTEAM.GetTeam( index )
-	return teams[index]
-end
-
-function WarboxTEAM.IsTeam( teem )
-	if teem == nil then return false end
-	return getmetatable(teem) == getmetatable(WarboxTEAM)
-end
-
 
 local meta = {}
 meta.__index = meta
@@ -51,13 +38,49 @@ function meta:GetScore()
 end
 
 function meta:SetScore( score )
-	assert(type(score) == "number", "score has to be a number.")
+	assert(type(score) == "number", "score of type " .. type(index) .. " has to be a number.")
 	team.SetScore(self:GetIndex(), score)
 end
 
 function meta:AddScore( score )
-	assert(type(score) == "number", "score has to be a number.")
+	assert(type(score) == "number", "score of type " .. type(index) .. "  has to be a number.")
 	team.AddScore(self:GetIndex(), score)
+end
+
+-- Income & Resources ----------------
+-- resource income over time. split and given to each player in the team
+-- Not sure if I want this to exist here, although it does matter a lot, so still possible.
+function meta:GetIncome()
+	return self.Income
+end
+
+function meta:SetIncome( income )
+	assert(type(income) == "number", "income of type " .. type(index) .. "  has to be a number.")
+	self.Income = income
+end
+
+function meta:AddIncome( income )
+	assert(type(income) == "number", "income of type " .. type(index) .. "  has to be a number.")
+	self.Income = self.Income + income
+end
+
+-- Possibly make teams actually have a variable with res, and make sure its updated when players res is?
+-- Would need to somehow make sure it links to everything relevant and isnt hell to edit anything
+-- Like player join/leave team, player res change, other?
+-- Also possible to make a shared pool of res, doubt it will be the only one, but something that could
+-- somehow affect teamplay in an interesting way that simply donating back and forth cant?
+-- Scoreboard kinda spam this afaik?
+function meta:GetRes()
+	
+	local sum = 0
+	for _, ply in pairs( self:GetPlayersReference() ) do
+		
+		sum = sum + ply:GetRes()
+
+	end
+	
+	return sum
+	
 end
 
 
@@ -164,6 +187,40 @@ function meta:RemoveUnit( unit )
 end
 
 
+-- The static 'class' WarboxTEAM used to create teams, and with some static utility functions
+WarboxTEAM = {}
+
+local teams = {}
+
+function WarboxTEAM.GetTeamsReference( )
+	return teams
+end
+
+function WarboxTEAM.GetTeamsCopy( )
+	return table.Copy(teams)
+end
+
+function WarboxTEAM.GetTeam( index )
+	return teams[index]
+end
+
+function WarboxTEAM.IsTeam( teem )
+	if teem == nil then return false end
+	return getmetatable(teem) == meta
+end
+
+function WarboxTEAM.Payday( )
+	print("PAYDAY")
+	for k,teem in pairs(teams) do
+		local numplayers = teem:GetPlayerCount()
+		local playerincome = teem:GetIncome() / numplayers
+		for ply,_ in pairs(teem:GetPlayersReference()) do
+			ply:AddRes(playerincome)
+		end
+	end
+end
+timer.Create( "WarBox.team_extension.Payday", Balance.notsorted.PaydayDelay, 0, WarboxTEAM.Payday )
+
 
 setmetatable(WarboxTEAM, {
 	__call = function( self, index, name, color, public )
@@ -183,6 +240,7 @@ setmetatable(WarboxTEAM, {
 		
 		Team.Open = true -- false When a player locks his team
 		Team.Score = 0
+		Team.Income = 0
 		Team.Research = {}
 		Team.players = {}
 		Team.units = {}

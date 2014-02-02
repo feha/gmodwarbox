@@ -30,20 +30,25 @@ function TOOL:LeftClick( trace )
 		end
 		
 		if (trace.Hit and not trace.HitNoDraw) then
-			unit = ents.Create("wb_shooter_infantry")
-				unit:SetPos( trace.HitPos + trace.HitNormal )
-				unit:SetAngles(Normal:Angle())
-				unit:SetTeam( teem )
-			unit:Spawn()
-			unit:Activate()
-			
-			undo.Create( "infantry" )
-				undo.AddEntity( unit )
-				undo.SetPlayer( self:GetOwner() )
-			undo.Finish()
-			cleanup.Add( ply, "Warbox", unit )
-			
-			return true
+			local entityclass = "wb_shooter_infantry"
+			if ply:ConsumeRes(Balance[entityclass].Cost) then
+				unit = ents.Create(entityclass)
+					unit:SetPos( trace.HitPos + trace.HitNormal )
+					unit:SetAngles(Normal:Angle())
+					unit:SetTeam( teem )
+				unit:Spawn()
+				unit:Activate()
+				
+				undo.Create( "infantry" )
+					undo.AddEntity( unit )
+					undo.SetPlayer( self:GetOwner() )
+				undo.Finish()
+				cleanup.Add( ply, "Warbox", unit )
+			else
+				-- Really should add a message system
+				print("cant afford")
+				return
+			end
 		end
 		
 	end

@@ -11,9 +11,10 @@ GM.IsSandboxDerived = true
 -- Add all clientside and shared files here
 if SERVER then
 	-- .txt files
-	AddCSLuaFile( "data/gamestrings/english.txt" )
+	AddCSLuaFile( "../data/gamestrings/english.txt" )
 	
 	-- .lua files
+	AddCSLuaFile( "utility.lua" )
 	AddCSLuaFile( "balance.lua" )
 	AddCSLuaFile( "gamestrings.lua" )
 	AddCSLuaFile( "team_extension.lua" )
@@ -25,26 +26,28 @@ if SERVER then
 end
 
 -- Include shared files
+include( 'utility.lua' )
 include( 'balance.lua' )
 include( 'gamestrings.lua' )
 include( 'team_extension.lua' )
 include( 'player_extension.lua' )
 
+
 -- Create the initial teams
 -- inside or outside init?
---		ID		Name			Color(	Red		Green	Blue	Alpha)		public
-WarboxTEAM( -2,		"Neutral",		Color(	255,	255,	255,	255 ) )
-WarboxTEAM( -1,		"Admin",		Color(	0,		0,		0,		255 ) )
-WarboxTEAM( 0,		"Spectator",	Color(	255,	255,	255,	255 ),	true )
-WarboxTEAM( 1,		"Red",			Color(	255,	0,		0,		255 ),	true )
-WarboxTEAM( 2,		"Green",		Color(	0,		255,	0,		255 ),	true )
-WarboxTEAM( 3,		"Blue",			Color(	0,		0,		255,	255 ),	true )
-WarboxTEAM( 4,		"Cyan",			Color(	0,		200,	200,	255 ),	true )
-WarboxTEAM( 5,		"Magenta",		Color(	200,	0,		200,	255 ),	true )
-WarboxTEAM( 6,		"Yellow",		Color(	200,	200,	0,		255 ),	true )
-WarboxTEAM( 7,		"???",			Color(	100,	255,	255,	255 ),	true )
-WarboxTEAM( 8,		"Pink",			Color(	255,	100,	255,	255 ),	true )
-WarboxTEAM( 9,		"Orange???",	Color(	255,	255,	100,	255 ),	true )
+--			ID	Name								Color(	Red		Green	Blue	Alpha)	public
+WarboxTEAM( -2,	GameStrings.GetString("neutral"),	Color(	255,	255,	255,	255 ) )
+WarboxTEAM( -1,	GameStrings.GetString("admin"),		Color(	0,		0,		0,		255 ) )
+WarboxTEAM( 0,	GameStrings.GetString("spectator"),	Color(	255,	255,	255,	255 ),	true )
+WarboxTEAM( 1,	GameStrings.GetString("red"),		Color(	255,	0,		0,		255 ),	true )
+WarboxTEAM( 2,	GameStrings.GetString("green"),		Color(	0,		255,	0,		255 ),	true )
+WarboxTEAM( 3,	GameStrings.GetString("blue"),		Color(	0,		0,		255,	255 ),	true )
+WarboxTEAM( 4,	GameStrings.GetString("cyan"),		Color(	0,		200,	200,	255 ),	true )
+WarboxTEAM( 5,	GameStrings.GetString("magenta"),	Color(	200,	0,		200,	255 ),	true )
+WarboxTEAM( 6,	GameStrings.GetString("yellow"),	Color(	200,	200,	0,		255 ),	true )
+WarboxTEAM( 7,	GameStrings.GetString("???"),		Color(	100,	255,	255,	255 ),	true )
+WarboxTEAM( 8,	GameStrings.GetString("pink"),		Color(	255,	100,	255,	255 ),	true )
+WarboxTEAM( 9,	GameStrings.GetString("orange???"),	Color(	255,	255,	100,	255 ),	true )
 
 function GM:Initialize()
 	self.BaseClass.Initialize( self )
