@@ -24,7 +24,8 @@ function ENT:Initialize()
 	
 	local bboxtohealthresult = math.max( areatohealthresult, sizetohealthresult )
 	
-	self.MaxHealth = math.min( math.min( masstohealthresult, bboxtohealthresult ), self.MaxMaxHealth )
+	self.OriginalMaxHealth = math.min( math.min( masstohealthresult, bboxtohealthresult ), self.MaxMaxHealth )
+	self.MaxHealth = self.OriginalMaxHealth
 	self.CurHealth = self.MaxHealth
 	
 	-- Scaled linear from 3 seconds to 2 minutes

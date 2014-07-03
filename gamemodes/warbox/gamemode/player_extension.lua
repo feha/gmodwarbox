@@ -112,7 +112,7 @@ function PLAYER:ConsumeRes( cost )
 	self:SetRes( self:GetRes() - cost )
 	
 	-- Actually supposed to be another kind of message system used for this kind of stuff.
-	-- Something akin to warmelons I think ,where its lines of text that fade out over time
+	-- Something akin to warmelons I think, where its lines of text that fade out over time
 	self:Message( string.format(GameStrings.GetString("you_lost_res"), cost ), "nicered" )
 	
 	return true

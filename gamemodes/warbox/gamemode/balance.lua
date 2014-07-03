@@ -49,7 +49,7 @@ Balance.base_warprop = base_warprop
 
 local base_structure = {
 	IsStructure = true,
-	MaxHealth = 500, -- Default structure health
+	OriginalMaxHealth = 500, -- Default structure health (original = if max-health changes this does not)
 	BuildRegen = 100, -- Health regenerated per second if damaged while being built
 	DeathDamage = 20,
 	DeathRadius = 100
@@ -64,7 +64,7 @@ local base_unit = {
 --	IsAi = false,
 --	IsMobile = false,
 --	IsShooter = false,
-	MaxHealth = 25 -- Default unit health
+	OriginalMaxHealth = 25 -- Default unit health
 }
 base_unit = table.Merge( table.Copy(base_structure), base_unit )
 Balance.base_unit = base_unit
@@ -72,7 +72,7 @@ Balance.base_unit = base_unit
 
 local base_mobile = {
 	IsMobile = true,
-	MaxHealth = 10, -- Default mobile unit health
+	OriginalMaxHealth = 10, -- Default mobile unit health
 	Speed = 100,
 	MoveRange = 42
 }
@@ -82,7 +82,7 @@ Balance.base_mobile = base_mobile
 
 local base_ai = {
 	IsAi = true,
-	MaxHealth = 10, -- Default ai unit health
+	OriginalMaxHealth = 10, -- Default ai unit health
 	Delay = 0.250, -- seconds
 	Range = 500,
 	Priority = {
@@ -95,7 +95,7 @@ Balance.base_ai = base_ai
 
 
 local base_mobile_ai = {
-	MaxHealth = 5, -- Default ai unit health
+	OriginalMaxHealth = 5, -- Default ai unit health
 	Delay = 0.500, -- seconds
 	Range = 250,
 	Speed = 50,
@@ -125,10 +125,23 @@ local wb_structure_prop = {
 	MassRatio = 2.5,
 	AreaRatio = 1.685,
 	SizeRatio = 0.796,
-	MaxMaxHealth = 2000, -- Default structure health
+	OriginalMaxHealth = 2000, -- Default structure health
 	BuildTime = 1, -- seconds
 	DeathDamage = 10,
 	DeathRadius = 100
+}
+wb_structure_prop = table.Merge( table.Copy(base_structure), wb_structure_prop )
+Balance.wb_structure_prop = wb_structure_prop
+
+local wb_structure_constructionyard = {
+	IsConstructionYard = true,
+	Model = "models/props_trainstation/tracksign01.mdl",
+	OriginalMaxHealth	= 10000, -- Default structure health
+	BuildTime = 120, -- seconds
+	CostTable = {0, 50000, 100000, 250000, 350000, 500000, 700000, 1000000}, -- After the last cost, it is multiplies by 2 for each new
+	Range = 3000, -- Range of influence
+	DeathDamage = 5000,
+	DeathRadius = 1000
 }
 wb_structure_prop = table.Merge( table.Copy(base_structure), wb_structure_prop )
 Balance.wb_structure_prop = wb_structure_prop
@@ -137,7 +150,7 @@ Balance.wb_structure_prop = wb_structure_prop
 -- shooters
 local wb_shooter_scout = {
 	IsShooter = true,
-	MaxHealth = 16,
+	OriginalMaxHealth = 16,
 	BuildRegen = 100,
 	Cost = 50,
 	Delay = 1.200,
@@ -153,7 +166,7 @@ Balance.wb_shooter_scout = wb_shooter_scout
 
 local wb_shooter_infantry = {
 	IsShooter = true,
-	MaxHealth = 25,
+	OriginalMaxHealth = 25,
 	BuildRegen = 100,
 	Cost = 100,
 	Delay = 0.500,

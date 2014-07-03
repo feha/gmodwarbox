@@ -83,6 +83,19 @@ function meta:GetRes()
 	
 end
 
+function meta:AddRes( res )
+	
+	assert(type(res) == "number", "res of type " .. type(index) .. "  has to be a number.")
+	if self:GetConstructionYardCount() > 0 then
+		local numplayers = self:GetPlayerCount()
+		local playerincome = res / numplayers
+		for ply,_ in pairs(self:GetPlayersReference()) do
+			ply:AddRes(playerincome)
+		end
+	end
+	
+end
+
 
 -- Players ----------------
 function meta:GetPlayerCount()
@@ -122,6 +135,89 @@ function meta:RemovePlayer(ply)
 end
 
 
+-- Construction Yards ----------------
+function meta:PointIsInTerritory( point )
+	return ConstructionYard.PointIsWithinInfluence( point, self )
+end
+
+function meta:GetConstructionYardCount()
+	return #self.constructionyards or 0
+end
+
+function meta:GetNumberOfConstructionYardsBuilt()
+	return self.NumberOfConstructionYardsBuilt
+end
+
+
+function meta:GetConstructionYardsArray()
+	
+	local tbl = {}
+	for k,_ in pairs(self.constructionyards) do
+		table.insert(tbl,k)
+	end
+	return tbl
+	
+end
+
+function meta:GetConstructionYards()
+	return table.Copy(self.constructionyards)
+end
+
+
+function meta:SetConstructionYards( constructionyards )
+	
+	constructionyards = constructionyards or {}
+	self.constructionyards = {}
+	for k,v in pairs(constructionyards) do
+		assert(v.IsConstructionYard == true, "Table should be a table of ConstructionYards.")
+		self.constructionyards[v] = v
+	end
+	
+	-- TODO: How should this handle self.NumberOfConstructionYardsBuilt?
+	-- self.NumberOfConstructionYardsBuilt = #constructionyards
+	
+end
+
+
+function meta:AddConstructionYards( constructionyards )
+	
+	constructionyards = constructionyards or {}
+	for _,v in pairs(constructionyards) do
+		assert(v.IsConstructionYard == true, "Table should be a table of ConstructionYards.")
+		self:AddConstructionYard(v)
+	end
+	
+	self.NumberOfConstructionYardsBuilt = self.NumberOfConstructionYardsBuilt + #constructionyards
+	
+end
+
+function meta:AddConstructionYard( entity )
+	
+	assert(entity.IsConstructionYard == true, "entity should be a ConstructionYard.")
+	self.constructionyards[entity] = entity
+	
+	self.NumberOfConstructionYardsBuilt = self.NumberOfConstructionYardsBuilt + 1
+	
+end
+
+
+function meta:RemoveConstructionYards( constructionyards )
+	
+	for _,v in pairs(constructionyards or {}) do
+		self:RemoveConstructionYard(v)
+	end
+	
+end
+
+function meta:RemoveConstructionYard( entity )
+	
+	assert(entity.IsConstructionYard == true, "entity should be a ConstructionYard.")
+	assert(entity:GetTeam() == self, "entity should belong to the team it is being removed from.")
+	self.constructionyards[entity] = nil
+	
+end
+
+
 -- Units ----------------
 -- TODO: make shared with client
 function meta:GetUnitCount()
@@ -157,32 +253,33 @@ end
 
 function meta:AddUnits( units )
 	
-	for _,v in pairs(units) do
+	for _,v in pairs(units or {}) do
 		self:AddUnit(v)
 	end
 	
 end
 
-function meta:AddUnit( unit )
+function meta:AddUnit( entity )
 	
-	assert(unit.IsUnit == true, "Table should be a table of Units.")
-	self.units[unit] = unit
+	assert(entity.IsUnit == true, "entity should be a Unit.")
+	self.units[entity] = entity
 	
 end
 
 
 function meta:RemoveUnits( units )
 	
-	for _,v in pairs(units) do
+	for _,v in pairs(units or {}) do
 		self:RemoveUnit(v)
 	end
 	
 end
 
-function meta:RemoveUnit( unit )
+function meta:RemoveUnit( entity )
 	
-	assert(unit.IsUnit == true, "Table should be a table of Units.")
-	self.units[unit] = nil
+	assert(entity.IsUnit == true, "entity should be a Unit.")
+	assert(entity:GetTeam() == self, "entity should belong to the team it is being removed from.")
+	self.units[entity] = nil
 	
 end
 
@@ -212,11 +309,7 @@ end
 function WarboxTEAM.Payday( )
 	print("PAYDAY")
 	for k,teem in pairs(teams) do
-		local numplayers = teem:GetPlayerCount()
-		local playerincome = teem:GetIncome() / numplayers
-		for ply,_ in pairs(teem:GetPlayersReference()) do
-			ply:AddRes(playerincome)
-		end
+		teem:AddRes(teem:GetIncome())
 	end
 end
 timer.Create( "WarBox.team_extension.Payday", Balance.notsorted.PaydayDelay, 0, WarboxTEAM.Payday )
@@ -241,8 +334,10 @@ setmetatable(WarboxTEAM, {
 		Team.Open = true -- false When a player locks his team
 		Team.Score = 0
 		Team.Income = 0
+		Team.NumberOfConstructionYardsBuilt = 0
 		Team.Research = {}
 		Team.players = {}
+		Team.constructionyards = {}
 		Team.units = {}
 		
 		return Team

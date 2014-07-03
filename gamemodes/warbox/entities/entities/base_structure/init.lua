@@ -66,8 +66,9 @@ function ENT:Initialize()
 	
 	Structure.Add(self)
 	
-	self.IsAlive		=	true
-	self.CurHealth		=	self.MaxHealth
+	self.IsAlive		= true
+	self.MaxHealth		= self.OriginalMaxHealth
+	self.CurHealth		= self.MaxHealth
 	
 	-- Networked variables
 	self:SetNetworkedInt("WB_MaxHealth", math.floor(self.MaxHealth))
