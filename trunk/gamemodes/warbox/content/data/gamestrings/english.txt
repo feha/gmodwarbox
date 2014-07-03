@@ -6,13 +6,13 @@ playerjoined				= "Player %s joined the server"
 neutral					= Neutral
 admin					= Admin
 spectator				= Spectator
-red					= Red
+red						= Red
 green					= Green
 blue					= Blue
 cyan					= Cyan
 magenta					= Magenta
 yellow					= Yellow
-???					= ???
+???						= ???
 pink					= Pink
 orange???				= Orange???
 
@@ -27,18 +27,19 @@ progress				= "Progress: %i%%"
 -- The base entities, something is likely wrong if those strings are actually used in-game
 base_warprop				= WarProp
 base_structure				= Structure
-base_ai					= Intelligent Structure
-base_mobile				= Mobile Structure
+base_ai						= Intelligent Structure
+base_mobile					= Mobile Structure
 base_mobile_ai				= Mobile Intelligent Structure
-base_unit				= Unit
+base_unit					= Unit
 
 -- other entities
-wb_warprop_capturepoint			= Strategic Point
+wb_warprop_capturepoint				= Strategic Point
 wb_warprop_capturepoint_contester	= "Contester : %s"
 wb_warprop_capturepoint_captured	= *CAPTURED*
 wb_warprop_capturepoint_uncontested	= *UNCONTESTED*
 
-wb_structure_prop			= Prop
+wb_structure_prop					= Prop
+wb_structure_constructionyard		= Construction Yard
 
 wb_shooter_scout			= Scout
 
