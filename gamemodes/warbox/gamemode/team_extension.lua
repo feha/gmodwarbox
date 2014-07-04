@@ -90,7 +90,12 @@ function meta:AddRes( res )
 		local numplayers = self:GetPlayerCount()
 		local playerincome = res / numplayers
 		for ply,_ in pairs(self:GetPlayersReference()) do
+			ply:Message( string.format(GameStrings.GetString("payday_received"), playerincome ), "nicered" )
 			ply:AddRes(playerincome)
+		end
+	else
+		for ply,_ in pairs(self:GetPlayersReference()) do
+			ply:Message( string.format(GameStrings.GetString("payday_no_constructionyard") ), "nicered" )
 		end
 	end
 	
@@ -141,7 +146,11 @@ function meta:PointIsInTerritory( point )
 end
 
 function meta:GetConstructionYardCount()
-	return #self.constructionyards or 0
+	local sum = 0
+	for _,_ in pairs(self.constructionyards) do
+		sum = sum + 1
+	end
+	return sum
 end
 
 function meta:GetNumberOfConstructionYardsBuilt()
@@ -168,7 +177,7 @@ function meta:SetConstructionYards( constructionyards )
 	
 	constructionyards = constructionyards or {}
 	self.constructionyards = {}
-	for k,v in pairs(constructionyards) do
+	for _,_ in pairs(constructionyards) do
 		assert(v.IsConstructionYard == true, "Table should be a table of ConstructionYards.")
 		self.constructionyards[v] = v
 	end
@@ -221,7 +230,11 @@ end
 -- Units ----------------
 -- TODO: make shared with client
 function meta:GetUnitCount()
-	return #self.units or 0
+	local sum = 0
+	for _,_ in pairs(self.units) do
+		sum = sum + 1
+	end
+	return sum
 end
 
 

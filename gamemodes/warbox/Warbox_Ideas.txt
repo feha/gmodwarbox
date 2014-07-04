@@ -16,6 +16,8 @@ q-menu could bring up a larger version of the map instead?
 
 shorter TODO:
 
+- Give teams a max-units counter and enforce it
+
 - A system to place and save entities on the map, which can be loaded on map-load.
  think wmrts variant system, you cant have a gamemode that requires admins 24/7 or recreating the map everytime.
  Could be solved by mapper placing stuff, but letting it be done ingame is more versatile.

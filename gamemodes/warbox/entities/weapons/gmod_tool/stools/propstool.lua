@@ -20,8 +20,8 @@ if (CLIENT) then
 	language.Add( "Tool.propstool.name", "propstool" )
 	language.Add( "Tool.propstool.desc", "propstool for testing" )
 	language.Add( "Tool.propstool.0", "Left-click to spawn prop. Right-click copies angle of entity or surface to the stool." )
-	language.Add( "Undone_propstool", "Undone propstool stuff" )
-	language.Add( "SBoxLimit_Warbox_Unit", "Personal Limit Reached" )
+	language.Add( "Undone.propstool", "Undone propstool stuff" )
+	language.Add( "SBoxLimit.Warbox.Unit", "Personal Limit Reached" )
 end
 
 
@@ -64,7 +64,7 @@ end
 
 function TOOL:LeftClick( trace )
 	if ( SERVER ) then
-		if ( not self:GetSWEP():CheckLimit( "propstool" ) ) then return false end
+		--if ( not self:GetSWEP():CheckLimit( "propstool" ) ) then return false end
 		
 		local ply = self:GetOwner()
 		local Pos = trace.HitPos

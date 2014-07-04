@@ -18,13 +18,13 @@ function GM:PlayerInitialSpawn( ply )
 	-- Maybe remove and let the admin plugins handle welcoming messages?
 	chat.AddText( string.format(GameStrings.GetString("playerjoined"), ply:GetName()) )
 	
-	ply:SetTeam( 0 )
-	ply:SetRes( Balance.player.StartRes )
-	
 end
 
 function GM:PlayerAuthed( ply, steamID, uniqueID )
 	print("PlayerAuthed")
+	
+	ply:SetTeam( 0 )
+	ply:SetRes( Balance.player.StartRes )
 end
 
 function GM:PlayerSpawn(ply)

@@ -24,12 +24,12 @@ function ENT:Initialize()
 	
 	local bboxtohealthresult = math.max( areatohealthresult, sizetohealthresult )
 	
-	self.OriginalMaxHealth = math.min( math.min( masstohealthresult, bboxtohealthresult ), self.MaxMaxHealth )
+	self.OriginalMaxHealth = math.min( math.min( masstohealthresult, bboxtohealthresult ), self.OriginalMaxHealth )
 	self.MaxHealth = self.OriginalMaxHealth
 	self.CurHealth = self.MaxHealth
 	
 	-- Scaled linear from 3 seconds to 2 minutes
-	self.BuildTime = 3 + 2 * 60 * self.MaxHealth/self.MaxMaxHealth 
+	self.BuildTime = 3 + 2 * 60 * self.MaxHealth/self.OriginalMaxHealth 
 	
 	-- Networked variables
 	self:SetNetworkedInt("WB_MaxHealth", math.floor(self.MaxHealth))

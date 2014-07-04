@@ -57,7 +57,7 @@ function SWEP:Think()
 			local tr = ply:GetEyeTrace()
 			local pos = tr.HitPos
 			local radius = pos:Distance(self.selectVolume:GetPos()) / 49 -- magic number?
-			self.selectVolume:SetModelScale(Vector(radius,radius,radius))
+			self.selectVolume:SetModelScale(radius, 0)
 			self.selectVolume:SetPos((self.selectVolume.StartPos + pos)/2)
 			self.selectVolume:DrawModel()
 		end
@@ -128,7 +128,7 @@ function SWEP:PrimaryAttack()
 				self.selectVolume.StartPos = pos
 				self.selectVolume:SetColor(255,255,255, 75)
 				self.selectVolume:DrawShadow( false )
-				self.selectVolume:SetModelScale(Vector(0.01,0.01,0.01))
+				self.selectVolume:SetModelScale(0.01, 0)
 			self.selectVolume:Spawn()
 			self.selectVolume:Activate()
 		end
