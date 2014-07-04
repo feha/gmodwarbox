@@ -87,4 +87,8 @@ function ENT:Initialize()
 	ConstructionYard.Add(self)
 	self:GetTeam():AddConstructionYard(self)
 	
+	self:PhysicsInit( SOLID_VPHYSICS )
+	self:SetMoveType( MOVETYPE_NONE )
+	self:SetSolid( SOLID_VPHYSICS )
+	
 end

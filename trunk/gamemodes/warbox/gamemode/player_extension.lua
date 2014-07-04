@@ -52,6 +52,14 @@ function PLAYER:SetTeam( teamIndex )
 	self.warboxTeam:AddPlayer(self) -- Add player to new team
 	
 	self:SetColor(self.warboxTeam:GetColor()) -- Change to team-color
+
+	
+	if SERVER then
+		net.Start( "PlayerRes" )
+			net.WriteEntity( self )
+			net.WriteFloat( self:GetRes() )
+		net.Send( self:GetTeam():GetPlayersArray() )
+	end
 	
 end
 
@@ -89,16 +97,16 @@ function PLAYER:SetRes( res )
 		net.Start( "PlayerRes" )
 			net.WriteEntity( self )
 			net.WriteFloat( res )
-		net.End( ply )
+		net.Send( self:GetTeam():GetPlayersArray() )
 	end
 end
 if SERVER then
 	util.AddNetworkString( "PlayerRes" )
 else
 	net.Receive( "PlayerRes", function( )
-			ply = net.ReadEntity()
-			res = net.ReadFloat()
-			ply:SetRes( res )
+		local ply = net.ReadEntity()
+		local res = net.ReadFloat()
+		ply:SetRes( res )
 	end )
 end
 

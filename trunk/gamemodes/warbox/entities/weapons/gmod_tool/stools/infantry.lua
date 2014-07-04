@@ -6,17 +6,17 @@ cleanup.Register("Warbox")
 TOOL.ClientConVar[ "teamnumber" ] = "1"
 
 if (CLIENT) then
-	language.Add( "Tool_infantry_name", "infantry" )
-	language.Add( "Tool_infantry_desc", "Tool to spawn infantry" )
-	language.Add( "Tool_infantry_0", "Left-click to spawn unit. Right-click to spawn unit welded?" )
-	language.Add( "Undone_teststool", "Undone infantry" )
-	language.Add( "SBoxLimit_Warbox_Unit", "Personal Limit Reached" )
+	language.Add( "Tool.infantry.name", "infantry" )
+	language.Add( "Tool.infantry.desc", "Tool to spawn infantry" )
+	language.Add( "Tool.infantry.0", "Left-click to spawn unit. Right-click to spawn unit welded?" )
+	language.Add( "Undone.teststool", "Undone infantry" )
+	language.Add( "SBoxLimit.Warbox.Unit", "Personal Limit Reached" )
 end
 
 function TOOL:LeftClick( trace )
 	if ( SERVER ) then
 	
-		if ( not self:GetSWEP():CheckLimit( "infantry" ) ) then return false end
+		--if ( not self:GetSWEP():CheckLimit( "infantry" ) ) then return false end
 		
 		local ply = self:GetOwner()
 		local Pos = trace.HitPos
@@ -58,7 +58,7 @@ end
 function TOOL:RightClick(trace)
 	if ( SERVER ) then
 		
-		if ( not self:GetSWEP():CheckLimit( "infantry" ) ) then return false end
+		--if ( not self:GetSWEP():CheckLimit( "infantry" ) ) then return false end
 		
 		local ply = self:GetOwner()
 		local Pos = trace.HitPos
@@ -98,7 +98,7 @@ end
 
 
 function TOOL.BuildCPanel(CPanel)
-	CPanel:AddControl ("Header", { Text="#Tool_infantry_name", Description="#Tool_infantry_desc" })
+	CPanel:AddControl ("Header", { Text="#Tool.infantry.name", Description="#Tool.infantry.desc" })
 	
 	--local VGUI = vgui.Create("HelpButton",CPanel)
 	--	VGUI:SetTopic("teststool")

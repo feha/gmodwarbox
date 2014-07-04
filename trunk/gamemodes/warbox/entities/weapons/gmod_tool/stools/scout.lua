@@ -6,17 +6,17 @@ cleanup.Register("Warbox")
 TOOL.ClientConVar[ "teamnumber" ] = "1"
 
 if (CLIENT) then
-	language.Add( "Tool_scout_name", "scout" )
-	language.Add( "Tool_scout_desc", "Tool to spawn scout" )
-	language.Add( "Tool_scout_0", "Left-click to spawn unit. Right-click to spawn unit welded?" )
-	language.Add( "Undone_scout", "Undone scout" )
-	language.Add( "SBoxLimit_Warbox_Unit", "Personal Limit Reached" )
+	language.Add( "Tool.scout.name", "scout" )
+	language.Add( "Tool.scout.desc", "Tool to spawn scout" )
+	language.Add( "Tool.scout.0", "Left-click to spawn unit. Right-click to spawn unit welded?" )
+	language.Add( "Undone.scout", "Undone scout" )
+	language.Add( "SBoxLimit.Warbox.Unit", "Personal Limit Reached" )
 end
 
 function TOOL:LeftClick( trace )
 	if ( SERVER ) then
 	
-		if ( not self:GetSWEP():CheckLimit( "scout" ) ) then return false end
+		--if ( not self:GetSWEP():CheckLimit( "scout" ) ) then return false end
 		
 		local ply = self:GetOwner()
 		local Pos = trace.HitPos
@@ -48,7 +48,7 @@ function TOOL:LeftClick( trace )
 				return true
 			else
 				-- Really should add a message system
-				print("cant afford")
+				ply:Message( string.format(GameStrings.GetString("you_need_more_resources"), ply:GetRes() ), "nicered" )
 				return
 			end
 		end
@@ -60,7 +60,7 @@ end
 function TOOL:RightClick(trace)
 	if ( SERVER ) then
 		
-		if ( not self:GetSWEP():CheckLimit( "scout" ) ) then return false end
+		--if ( not self:GetSWEP():CheckLimit( "scout" ) ) then return false end
 		
 		local ply = self:GetOwner()
 		local Pos = trace.HitPos
@@ -100,7 +100,7 @@ end
 
 
 function TOOL.BuildCPanel(CPanel)
-	CPanel:AddControl ("Header", { Text="#Tool_scout_name", Description="#Tool_scout_desc" })
+	CPanel:AddControl ("Header", { Text="#Tool.scout.name", Description="#Tool.scout.desc" })
 	
 	--local VGUI = vgui.Create("HelpButton",CPanel)
 	--	VGUI:SetTopic("teststool")

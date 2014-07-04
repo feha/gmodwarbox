@@ -6,16 +6,16 @@ cleanup.Register("Warbox")
 TOOL.ClientConVar[ "teamnumber" ] = "1"
 
 if (CLIENT) then
-	language.Add( "Tool_teststool_name", "teststool" )
-	language.Add( "Tool_teststool_desc", "teststool for testing" )
-	language.Add( "Tool_teststool_0", "Left-click to teststool stuff. Right-click to teststool stuff differently?" )
-	language.Add( "Undone_teststool", "Undone teststool stuff" )
-	language.Add( "SBoxLimit_Warbox_Unit", "Personal Limit Reached" )
+	language.Add( "Tool.teststool.name", "teststool" )
+	language.Add( "Tool.teststool.desc", "teststool for testing" )
+	language.Add( "Tool.teststool.0", "Left-click to teststool stuff. Right-click to teststool stuff differently?" )
+	language.Add( "Undone.teststool", "Undone teststool stuff" )
+	language.Add( "SBoxLimit.Warbox.Unit", "Personal Limit Reached" )
 end
 
 function TOOL:LeftClick(trace)
 	if ( SERVER ) then
-		if ( not self:GetSWEP():CheckLimit( "teststool" ) ) then return false end
+		--if ( not self:GetSWEP():CheckLimit( "teststool" ) ) then return false end
 		
 		local ply = self:GetOwner()
 		local Pos = trace.HitPos
@@ -56,7 +56,7 @@ function TOOL:RightClick(trace)
 end
 
 function TOOL.BuildCPanel(CPanel)
-	CPanel:AddControl ("Header", { Text="#Tool_teststool_name", Description="#Tool_teststool_desc" })
+	CPanel:AddControl ("Header", { Text="#Tool.teststool.name", Description="#Tool.teststool.desc" })
 	
 	--local VGUI = vgui.Create("HelpButton",CPanel)
 	--	VGUI:SetTopic("teststool")

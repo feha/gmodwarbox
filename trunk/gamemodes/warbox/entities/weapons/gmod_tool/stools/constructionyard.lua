@@ -6,17 +6,17 @@ cleanup.Register("Warbox")
 TOOL.ClientConVar[ "teamnumber" ] = "1"
 
 if (CLIENT) then
-	language.Add( "Tool_constructionyard_name", "constructionyard" )
-	language.Add( "Tool_constructionyard_desc", "Tool to spawn constructionyard" )
-	language.Add( "Tool_constructionyard_0", "Left-click to spawn unit. Right-click to spawn unit welded?" )
-	language.Add( "Undone_teststool", "Undone constructionyard" )
-	language.Add( "SBoxLimit_Warbox_Unit", "Personal Limit Reached" )
+	language.Add( "Tool.constructionyard.name", "constructionyard" )
+	language.Add( "Tool.constructionyard.desc", "Tool to spawn constructionyard" )
+	language.Add( "Tool.constructionyard.0", "Left-click to spawn unit. Right-click to spawn unit welded?" )
+	language.Add( "Undone.teststool", "Undone constructionyard" )
+	language.Add( "SBoxLimit.Warbox.Unit", "Personal Limit Reached" )
 end
 
 function TOOL:LeftClick( trace )
 	if ( SERVER ) then
 	
-		if ( not self:GetSWEP():CheckLimit( "constructionyard" ) ) then return false end
+		--if ( not self:GetSWEP():CheckLimit( "constructionyard" ) ) then return false end
 		
 		local ply = self:GetOwner()
 		local Pos = trace.HitPos
@@ -33,7 +33,7 @@ function TOOL:LeftClick( trace )
 			local entityclass = "wb_structure_constructionyard"
 			local built = teem:GetNumberOfConstructionYardsBuilt()
 			local cost
-			if (built+1 < #Balance[entityclass].CostTable) then
+			if (built+1 < #(Balance[entityclass].CostTable)) then
 				cost = Balance[entityclass].CostTable[built+1]
 			else
 				local num = built+1 - #Balance[entityclass].CostTable
@@ -42,7 +42,7 @@ function TOOL:LeftClick( trace )
 			if ply:ConsumeRes(cost) then
 				ent = ents.Create(entityclass)
 					ent:SetPos( trace.HitPos + trace.HitNormal )
-					ent:SetAngles(Normal:Angle())
+					ent:SetAngles(Angle(0,0,0))
 					ent:SetTeam( teem )
 				ent:Spawn()
 				ent:Activate()
@@ -70,7 +70,7 @@ end
 function TOOL:RightClick(trace)
 	if ( SERVER ) then
 		
-		if ( not self:GetSWEP():CheckLimit( "constructionyard" ) ) then return false end
+		--if ( not self:GetSWEP():CheckLimit( "constructionyard" ) ) then return false end
 		
 		local ply = self:GetOwner()
 		local Pos = trace.HitPos
@@ -86,7 +86,7 @@ function TOOL:RightClick(trace)
 		if (trace.Hit and not trace.HitNoDraw) then
 			unit = ents.Create("wb_structure_constructionyard")
 				unit:SetPos( trace.HitPos + trace.HitNormal )
-				unit:SetAngles(Normal:Angle())
+				unit:SetAngles(Angle(0,0,0))
 				unit:SetTeam( teem )
 			unit:Spawn()
 			unit:Activate()
@@ -110,7 +110,7 @@ end
 
 
 function TOOL.BuildCPanel(CPanel)
-	CPanel:AddControl ("Header", { Text="#Tool_constructionyard_name", Description="#Tool_constructionyard_desc" })
+	CPanel:AddControl ("Header", { Text="#Tool.constructionyard.name", Description="#Tool.constructionyard.desc" })
 	
 	--local VGUI = vgui.Create("HelpButton",CPanel)
 	--	VGUI:SetTopic("teststool")

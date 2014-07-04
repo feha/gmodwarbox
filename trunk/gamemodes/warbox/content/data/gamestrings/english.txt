@@ -1,5 +1,8 @@
 -- chat notifications and similar
 you_lost_res				= "You lost %i resources."
+you_need_more_resources		= "You need more resources. You have %i right now."
+payday_received				= "PAYDAY! You received %i res from periodic income."
+payday_no_constructionyard	= "PAYDAY! You need a construction yard to receive anything."
 playerjoined				= "Player %s joined the server"
 
 -- Team names and other team related stuff

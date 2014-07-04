@@ -135,7 +135,7 @@ Balance.wb_structure_prop = wb_structure_prop
 
 local wb_structure_constructionyard = {
 	IsConstructionYard = true,
-	Model = "models/props_trainstation/tracksign01.mdl",
+	Model = "models/props_buildings/watertower_001c.mdl",
 	OriginalMaxHealth	= 10000, -- Default structure health
 	BuildTime = 120, -- seconds
 	CostTable = {0, 50000, 100000, 250000, 350000, 500000, 700000, 1000000}, -- After the last cost, it is multiplies by 2 for each new
@@ -143,8 +143,8 @@ local wb_structure_constructionyard = {
 	DeathDamage = 5000,
 	DeathRadius = 1000
 }
-wb_structure_prop = table.Merge( table.Copy(base_structure), wb_structure_prop )
-Balance.wb_structure_prop = wb_structure_prop
+wb_structure_constructionyard = table.Merge( table.Copy(base_structure), wb_structure_constructionyard )
+Balance.wb_structure_constructionyard = wb_structure_constructionyard
 
 
 -- shooters

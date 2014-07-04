@@ -9,11 +9,12 @@ local LengthSqr = v.LengthSqr
 function ENT:Draw()
 	
 	-- To get transparancy you need to both set rendermode and rendergroup
-	self:SetRenderMode(RENDERMODE_TRANSALPHA )
-	self.RenderGroup = RENDERGROUP_BOTH
+	self:SetRenderMode(RENDERMODE_NORMAL  )
+	self.RenderGroup = RENDERGROUP_OPAQUE
 	
-	-- afaik the baseclass only does self:DrawModel(), but I use baseclass anyway
-	BaseClass.Draw( self )
+	---- afaik the baseclass only does self:DrawModel(), but I use baseclass anyway
+	--BaseClass.Draw( self )
+	self:DrawModel()
 	
 	-- health and building worldtip
 	local ply = LocalPlayer()

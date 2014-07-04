@@ -20,6 +20,9 @@ function ENT:Initialize()
 	self.contestingTeam = nil
 	self.contestProgress = 0
 	
+	self:PhysicsInit( SOLID_VPHYSICS )
+	self:SetMoveType( MOVETYPE_NONE )
+	self:SetSolid( SOLID_VPHYSICS )
 	
 	-- Networked variables
     self:SetNetworkedInt("WB_ContestProgress", math.floor( self.contestProgress * 100 ) )
@@ -116,7 +119,7 @@ function ENT:CheckContest( contestants, numcontestants, deltatime )
 		-- If there is no team trying to contest a point, it belongs to whatever team last captured it,
 		-- with any contest-progress slowly resetting.
 		if self.contestProgress > 0 then
-			ENT:AddContestProgress( -0.1 * deltatime )
+			self:AddContestProgress( -0.1 * deltatime )
 		end
 		
 	end
