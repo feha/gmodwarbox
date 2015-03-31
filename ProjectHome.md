@@ -1,0 +1,3 @@
+A gamemode for Garrys mod. Warbox is a RTS where you can build your own tanks and units as if it was the standard sandbox gamemode. Those units has custom entities placed on them, and will be able to shoot other players creations. You fight for resources, and ultimately the destruction of your foes.
+
+In short, it is a sandbox derivate, where players are playing in teams, has resources, bases and fight to win.
