@@ -2,49 +2,35 @@ include("shared.lua")
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
-DEFINE_BASECLASS( "base_anim" )
+local BaseClass = baseclass.Get("base_anim")
+--ENT.BaseClass = baseclass.Get("base_anim")
+
+include("mixins/BalanceMixin.lua")
+include("mixins/QueryableTagMixin.lua")
+include("mixins/TeamMixin.lua")
+include("mixins/BuildingMixin.lua")
+Mixins.RegisterMixin(ENT, BalanceMixin)
+Mixins.RegisterMixin(ENT, QueryableTagMixin)
+Mixins.RegisterMixin(ENT, TeamMixin)
+Mixins.RegisterMixin(ENT, BuildingMixin)
 
 -- local references to commonly used functions
 local v = FindMetaTable("Vector")
 local LengthSqr = v.LengthSqr
 
 
--- Table used for "static" functions
+-- Static helper functions
 WarProp = {}
-
--- When searching for stuff extending base_structure, this table should be faster.
-local warprops = {}
 function WarProp.GetTableReference()
-	return warprops -- Copying steals performance, this function is better used when it wont be modified.
+	return QueryableTagMixin.GetTableReference("WarProp")
 end
 function WarProp.GetTable()
-	return table.Copy(warprops)
+	return QueryableTagMixin.GetTable("WarProp")
 end
-function WarProp.Add(warprop)
-	assert(warprop, "warprop is nil, its bad idea to add it to he WarProp table.")
-	assert(warprop.CallOnRemove, "warprop.CallOnRemove is nil. If you call WarProp.Remove(warprop) manually, just create an empty function.")
-	assert(type(warprop.CallOnRemove) == "function", "warprop.CallOnRemove is not a function. If you call WarProp.Remove(warprop) manually, just create an empty function.")
-	
-	table.insert( warprops, warprop )
-	warprop:CallOnRemove( "RemoveWarProp", WarProp.Remove )
-end
-function WarProp.Remove(warprop)
-	for k,v in pairs(warprops) do
-		if (warprop == v) then
-			table.remove(warprops, k)
-			v:RemoveCallOnRemove( "RemoveWarPropFromSelection" )
-			break
-		end
-	end
-end
-
-
--- Static helper functions
 function WarProp.IsValid( warprop )
 	return warprop and IsValid(warprop) and warprop.IsWarProp
 end
-
-
+----[[
 function WarProp.UpdateNetworkedVariables( )
 	for k, ply in pairs(player.GetAll()) do
 		local entity = ply:GetEyeTrace().Entity
@@ -55,6 +41,7 @@ function WarProp.UpdateNetworkedVariables( )
 	end
 end
 timer.Create( "WarProp.UpdateNetworkedVariables", Balance.notsorted.WorlTipUpdateRate, 0, WarProp.UpdateNetworkedVariables )
+--]]
 
 -----------------------------------------------------------------------------------------
 
@@ -62,22 +49,11 @@ timer.Create( "WarProp.UpdateNetworkedVariables", Balance.notsorted.WorlTipUpdat
 function ENT:Initialize()
 	
 	BaseClass.Initialize( self )
+    
+    self.InitializeMixins( self )
 	
-	-- Fields defualt values
-	self.Balance = Balance[self:GetWBType()]
-	for	k, v in pairs(self.Balance) do
-		self[k] = v
-	end
-	
-	WarProp.Add(self)
-	
-	self.Building		= self.BuildTime > 0 and true
-	self.BuildProgress	= self.BuildTime > 0 and 0 or 1
-	self.InitTime		= CurTime()
-	self.LastBuild		= self.InitTime
-	
-	-- Networked variables
-    self:SetNetworkedInt("WB_BuildProgress", math.floor( self.BuildProgress * 100 ) )
+    self:AddTag( "WarProp", function() self:RemoveCallOnRemove("RemoveWarProp") end )
+	self:CallOnRemove( "RemoveWarProp", function() self:RemoveTag("WarProp")  end )
 	
 	-- make it static and change to physics in subclasses when needed?
 	self:SetModel( self.Model )
@@ -98,47 +74,7 @@ function ENT:Initialize()
 	else
 		self:SetMaterial(self.StdMat)
 	end
-	self:SetColor( self:GetTeam().Color )
-	local color = self:GetColor()
-	color.a = 100 + 155 * self.BuildProgress -- move base alpha to Balance.lua?
-	self:SetColor(color)
 	
-	if self.Building then
-		self:SheduleBuilding()
-	end
-	
-end
-
-
-function ENT:SheduleBuilding() -- looks cooler than copypasting this timer when I want to start building
-	-- move delay to Balance-lua?
-	timer.Simple( 0.1, function() if self.Build then self:Build() end end )
-end
-
-function ENT:Build()
-	if GetGameIsPaused() == 0 then
-		
-		if WarProp.IsValid( self ) and self.Building then
-			local timeDiff = CurTime() - self.InitTime
-			local deltatime = CurTime() - self.LastBuild
-			self.BuildProgress = math.min(timeDiff/self.BuildTime, 1)
-			self.Building = self.BuildProgress < 1
-			
-			local color = self:GetColor()
-			-- move base alpha to Balance.lua?
-			color.a = 100 + 155 * self.BuildProgress
-			self:SetColor(color)
-			
-			if self.OnBuild then
-				self:OnBuild(deltatime)
-			end
-			
-			self.LastBuild = CurTime()
-			
-			if self.Building then
-				self:SheduleBuilding()
-			end
-		end
-		
-	end
+    self.PostInitializeMixins( self )
+    
 end

@@ -115,14 +115,16 @@ function PLAYER:AddRes( res )
 end
 
 function PLAYER:ConsumeRes( cost )
-	if self:GetRes() < cost then return false end
-	
-	self:SetRes( self:GetRes() - cost )
-	
-	-- Actually supposed to be another kind of message system used for this kind of stuff.
-	-- Something akin to warmelons I think, where its lines of text that fade out over time
-	self:Message( string.format(GameStrings.GetString("you_lost_res"), cost ), "nicered" )
-	
+    if not self:IsAdminTeam() then
+        if self:GetRes() < cost then return false end
+        
+        self:SetRes( self:GetRes() - cost )
+        
+        -- Actually supposed to be another kind of message system used for this kind of stuff.
+        -- Something akin to warmelons I think, where its lines of text that fade out over time
+        self:Message( string.format(GameStrings.GetString("you_lost_res"), cost ), "nicered" )
+	end
+    
 	return true
 end
 
@@ -228,7 +230,8 @@ if SERVER then
 		
 		-- TODO
 		-- Change to use a list of mobile units, and alternative base_units.
-		local source = ( select_non_mobile and Structure.GetTableReference() ) or Base_Unit.GetTableReference()
+		local source = ( select_non_mobile and Structure.GetTableReference() )
+                or Base_Unit.GetTableReference()
 		
 		local type_to_unit = {}
 		local types_in_selection = {}

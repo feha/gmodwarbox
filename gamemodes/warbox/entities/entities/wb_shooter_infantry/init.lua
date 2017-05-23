@@ -2,7 +2,7 @@ include("shared.lua")
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
-DEFINE_BASECLASS( "base_mobile_ai" )
+local BaseClass = baseclass.Get("base_unit")
 
 -- local references to commonly used functions and libraries
 local v = FindMetaTable("Vector")

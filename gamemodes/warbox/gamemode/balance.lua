@@ -60,16 +60,24 @@ Balance.base_structure = base_structure
 
 local base_unit = {
 	IsUnit = true,
+	IsMobile = false,
+	IsAi = false,
+    IsShooter = false,
 	Delay = 1, -- seconds
---	IsAi = false,
---	IsMobile = false,
---	IsShooter = false,
-	OriginalMaxHealth = 25 -- Default unit health
+	OriginalMaxHealth = 25, -- Default unit health
+	Speed = 100,
+	MoveRange = 42,
+	Delay = 0.250, -- seconds
+	Range = 500,
+	Priority = {
+		base_structure	=	10,
+		base_unit		=	20
+	}
 }
 base_unit = table.Merge( table.Copy(base_structure), base_unit )
 Balance.base_unit = base_unit
 
-
+--[[
 local base_mobile = {
 	IsMobile = true,
 	OriginalMaxHealth = 10, -- Default mobile unit health
@@ -104,7 +112,7 @@ local base_mobile_ai = {
 base_mobile_ai = table.Merge( table.Copy(base_mobile), base_mobile_ai )
 base_mobile_ai = table.Merge( table.Copy(base_ai), base_mobile_ai )
 Balance.base_mobile_ai = base_mobile_ai
-
+--]]
 
 -- warprops
 local wb_warprop_capturepoint = {
@@ -149,7 +157,9 @@ Balance.wb_structure_constructionyard = wb_structure_constructionyard
 
 -- shooters
 local wb_shooter_scout = {
-	IsShooter = true,
+	IsMobile = true,
+	IsAi = true,
+    IsShooter = true,
 	OriginalMaxHealth = 16,
 	BuildRegen = 100,
 	Cost = 50,
@@ -160,12 +170,14 @@ local wb_shooter_scout = {
 	Damage = 3,
 	CaptureMultiplier = 2
 }
-wb_shooter_scout = table.Merge( table.Copy(base_mobile_ai), wb_shooter_scout )
+wb_shooter_scout = table.Merge( table.Copy(base_unit), wb_shooter_scout )
 Balance.wb_shooter_scout = wb_shooter_scout
 
 
 local wb_shooter_infantry = {
-	IsShooter = true,
+	IsMobile = true,
+	IsAi = true,
+    IsShooter = true,
 	OriginalMaxHealth = 25,
 	BuildRegen = 100,
 	Cost = 100,
@@ -178,5 +190,5 @@ local wb_shooter_infantry = {
 	Damage = 5,
 	BulletForce = 1,
 }
-wb_shooter_infantry = table.Merge( table.Copy(base_mobile_ai), wb_shooter_infantry )
+wb_shooter_infantry = table.Merge( table.Copy(base_unit), wb_shooter_infantry )
 Balance.wb_shooter_infantry = wb_shooter_infantry

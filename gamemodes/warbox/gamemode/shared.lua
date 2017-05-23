@@ -26,6 +26,7 @@ if SERVER then
 end
 
 -- Include shared files
+include( 'mixins.lua' )
 include( 'utility.lua' )
 include( 'balance.lua' )
 include( 'gamestrings.lua' )

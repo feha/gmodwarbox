@@ -25,14 +25,17 @@ function TOOL:LeftClick( trace )
 		local teem = nil
 		if ply:IsAdminTeam() then
 			teem = WarboxTEAM.GetTeam( self:GetClientNumber("teamnumber") )
+            print("admin")
 		else
 			teem = ply:GetTeam()
+            print("not admin")
 		end
+        print(teem)
 		
 		if (trace.Hit and not trace.HitNoDraw) then
 			local entityclass = "wb_shooter_scout"
 			if ply:ConsumeRes(Balance[entityclass].Cost) then
-				unit = ents.Create(entityclass)
+				local unit = ents.Create(entityclass)
 					unit:SetPos( trace.HitPos + trace.HitNormal )
 					unit:SetAngles(Normal:Angle())
 					unit:SetTeam( teem )
@@ -69,19 +72,22 @@ function TOOL:RightClick(trace)
 		local teem = nil
 		if ply:IsAdminTeam() then
 			teem = WarboxTEAM.GetTeam( self:GetClientNumber("teamnumber") )
+            print("admin")
 		else
 			teem = ply:GetTeam()
+            print("not admin")
 		end
+        print(teem)
 		
 		if (trace.Hit and not trace.HitNoDraw) then
-			unit = ents.Create("wb_shooter_scout")
+			local unit = ents.Create("wb_shooter_scout")
 				unit:SetPos( trace.HitPos + trace.HitNormal )
 				unit:SetAngles(Normal:Angle())
 				unit:SetTeam( teem )
 			unit:Spawn()
 			unit:Activate()
 			
-			constraint = constraint.Weld( unit, trace.Entity, 0, trace.PhysicsBone, 0, true )
+			local constraint = constraint.Weld( unit, trace.Entity, 0, trace.PhysicsBone, 0, true )
 			trace.Entity:DeleteOnRemove( unit )
 			
 			undo.Create( "scout" )

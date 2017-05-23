@@ -1,11 +1,11 @@
 
 assert(Mixins)
 
-Mixins.HealthMixin = Mixins.CreateMixin( Mixins.HealthMixin, "Health" )
-local HealthMixin = Mixins.HealthMixin
+HealthMixin = Mixins.CreateMixin( HealthMixin, "Health" )
 
 HealthMixin.expectedMixins =
 {
+    Balance = "Loads values such as maxhealth."
 }
 
 HealthMixin.expectedCallbacks =
@@ -29,7 +29,7 @@ HealthMixin.networkVars =
 --]]
 
 function HealthMixin:Initialize()
-
+    
     self.IsAlive		= true
     self.MaxHealth = self.OriginalMaxHealth
     self.CurHealth = self.MaxHealth
