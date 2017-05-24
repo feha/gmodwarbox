@@ -18,6 +18,13 @@ function ENT:Initialize()
     self.localShootPos = Vector(0,0,30)
     self.shooterCanShoot = false
     self.windupSound = CreateSound(self, "vehicles/airboat/fan_blade_idle_loop1.wav")
+    self:CallOnRemove( "RemoveWindup"
+            , function(projectile)
+                if self.windupSound then
+                    projectile:Remove()
+                    self.windupSound:Stop()
+                end
+            end, self.projectile )
 	
 end
 
@@ -25,7 +32,7 @@ end
 -- Wind up effect / Charge the magics
 function ENT:OnNewTarget( target, tarPos, direction, rangeSqr )
     if target and self.projectile then
-        local unwound = Curtime() - self.shooterWindupEnd
+        local unwound = CurTime() - self.shooterWindupEnd
         local wound = self.shooterWindupEnd - self.shooterWindupStart - unwound
         self.shooterWindupStart = CurTime() - wound
     elseif not target then
@@ -58,6 +65,7 @@ function ENT:OnShooterThink()
                 self.projectile.damage = self.damage
                 self.projectile.force = self.projectileForce
                 self.projectile.explosionRadius = self.projectileExplosionRadius
+                self.projectile.shooter = self
             self.projectile:Activate()
             self.projectile:Spawn()
             self.canHitFilter[self.projectile] = self.projectile
@@ -95,9 +103,7 @@ function ENT:Shoot( targetEntity )
             , math.Rand(-self.spread.y, self.spread.y)
             , math.Rand(-self.spread.z, self.spread.z))
     direction:Rotate(spread) -- TODO fix
-    
     direction:Normalize()
-    --Vector(direction.x * spread.x, direction.y * spread.y, direction.z * spread.z)
     
 	self.projectile:SetParent(nil)
     self.projectile:GetPhysicsObject():SetVelocity(direction*300)

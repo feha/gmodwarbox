@@ -31,7 +31,7 @@ function ENT:Initialize()
 end
 
 function ENT:ScheduleExpiration()
-	timer.Simple(self.timeToLive, function() self:OnExpiration() end)
+	timer.Simple(self.timeToLive, function() if self.OnExpiration then self:OnExpiration() end end)
 end
 
 function ENT:Think()
@@ -77,8 +77,8 @@ function ENT:OnExpiration()
     self:Break()
 end
 
+-- not running
 function ENT:PhysicsCollide( data )
-    print("PhysicsCollide", data)
     if self.shooter ~= data.Entity then
         self:Break()
     end
