@@ -4,9 +4,6 @@ AddCSLuaFile("shared.lua")
 
 local BaseClass = baseclass.Get("base_structure")
 
-include("mixins/QueryableTagMixin.lua")
-Mixins.RegisterMixin(ENT, QueryableTagMixin)
-
 
 -- local references to commonly used functions
 local v = FindMetaTable("Vector")
@@ -59,8 +56,6 @@ end
 function ENT:Initialize()
 	
 	BaseClass.Initialize( self )
-    
-    self.InitializeMixins( self )
 	
     -- TODO possible to check win condition in this callback
     self:AddTag( "ConstructionYard", function() self:RemoveCallOnRemove("RemoveConstructionYard") end )

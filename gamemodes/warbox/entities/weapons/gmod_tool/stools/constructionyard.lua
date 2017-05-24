@@ -43,7 +43,7 @@ function TOOL:LeftClick( trace )
 				ent = ents.Create(entityclass)
 					ent:SetPos( trace.HitPos + trace.HitNormal )
 					ent:SetAngles(Angle(0,0,0))
-					ent:SetTeam( teem )
+                    ent:SetTeam( teem )
 				ent:Spawn()
 				ent:Activate()
 				
@@ -84,22 +84,22 @@ function TOOL:RightClick(trace)
 		end
 		
 		if (trace.Hit and not trace.HitNoDraw) then
-			unit = ents.Create("wb_structure_constructionyard")
-				unit:SetPos( trace.HitPos + trace.HitNormal )
-				unit:SetAngles(Angle(0,0,0))
-				unit:SetTeam( teem )
-			unit:Spawn()
-			unit:Activate()
+			ent = ents.Create("wb_structure_constructionyard")
+				ent:SetPos( trace.HitPos + trace.HitNormal )
+				ent:SetAngles(Angle(0,0,0))
+                ent:SetTeam( teem )
+			ent:Spawn()
+			ent:Activate()
 			
-			constraint = constraint.Weld( unit, trace.Entity, 0, trace.PhysicsBone, 0, true )
-			trace.Entity:DeleteOnRemove( unit )
+			constraint = constraint.Weld( ent, trace.Entity, 0, trace.PhysicsBone, 0, true )
+			trace.Entity:DeleteOnRemove( ent )
 			
 			undo.Create( "constructionyard" )
-				undo.AddEntity( unit )
+				undo.AddEntity( ent )
 				undo.AddEntity( constraint )
 				undo.SetPlayer( self:GetOwner() )
 			undo.Finish()
-			cleanup.Add( ply, "Warbox", unit )
+			cleanup.Add( ply, "Warbox", ent )
 			
 			return true
 		end

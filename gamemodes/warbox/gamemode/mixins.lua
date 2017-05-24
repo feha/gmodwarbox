@@ -4,9 +4,13 @@ Mixins.IgnoreKeys = {
     MixinInitialize = "A function which copies the mixins behaviour to the subclass."
     , expectedMixins = "Mixin dependencies a mixin requires to function."
     , expectedCallbacks = "Callback dependencies a mixin requires to function."
-    , optionalCallbacks = "Callbacks which a mixin calls. The are optional and are really only "
-            .. "listed to expose the functionality to readers. In a similar vein,"
-            .. "listing methods used by mixin that might be desireable to override is also useful."
+    , documentation = "Functions which a mixin calls (well, anything worht documenting really)."
+            .. "Exists to expose the functionality to readers."
+            .. " Lists methods and variables used by a mixin (including ones not implementby mixin)"
+            .. ", some of which might be desireable to override."
+            
+    , optionalCallbacks = "Kind of an alias/copy for documentation, "
+            .. "but with focus on callbacks that aren't expected but subclass can implement."
 }
 
 --- Entities are tables
@@ -73,10 +77,10 @@ function Mixins.CreateMixin(mixin, name)
                                     if fst then
                                         f( ... )
                                     else
-                                        fst = f( ... )
+                                        fst = {f( ... )}
                                     end
                                 end
-                                return fst
+                                return unpack(fst)
                             end
                             , functionList = {}
                             , functionSet = {}
@@ -206,7 +210,7 @@ function Mixins.RegisterMixin(subclass, mixin)
     
     -- Shortcuts/aliases from entity
     subclass.InitializeMixins = Mixins.InitializeMixins
-    subclass.PostInitializeMixins = Mixins.PostInitializeMixins
+    subclass.PostSetupDataTablesMixins = Mixins.PostSetupDataTablesMixins
 end
 
 
@@ -252,16 +256,20 @@ function Mixins.InitializeMixins(subclass)
     end
 end
 
-function Mixins.PostInitializeMixins(subclass)
+function Mixins.PostSetupDataTablesMixins(subclass)
+    Mixins.CallMixinsOnly(subclass, "SetupDataTables")
+end
+
+function Mixins.CallMixinsOnly(subclass, funcName)
     assert(SubclassTypes[type(subclass)], "Expected 'subclass' to be of type 'table', but received "
             .. type(subclass) .. " instead.")
     
-    -- Pass silently if there are no mixins with an Initialize function,
+    -- Pass silently if there are no mixins with the function,
     -- or even if subclass.mixinDispatchers is nil.
-    if subclass.mixinDispatchers and subclass.mixinDispatchers["Initialize"] then
-        assert(type(subclass.mixinDispatchers["Initialize"].functionList) == "table")
+    if subclass.mixinDispatchers and subclass.mixinDispatchers[funcName] then
+        assert(type(subclass.mixinDispatchers[funcName].functionList) == "table")
         
-        for k, v in ipairs(subclass.mixinDispatchers["Initialize"].functionList) do
+        for k, v in ipairs(subclass.mixinDispatchers[funcName].functionList) do
             if k > 1 then
                 v(subclass)
             end

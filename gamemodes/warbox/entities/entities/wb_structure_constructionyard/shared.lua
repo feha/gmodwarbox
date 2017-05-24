@@ -2,7 +2,13 @@ ENT.Type = "anim"
 ENT.Base = "base_structure"
 ENT.Author = "Feha"
 
---DEFINE_BASECLASS( "base_structure" )
+include("mixins/QueryableTagMixin.lua")
+Mixins.RegisterMixin(ENT, QueryableTagMixin)
 
---ENT.Spawnable = false
---ENT.AdminSpawnable = false
+function ENT:SetupDataTables()
+    self.InitializeMixins( self )
+    
+    --code
+    
+    self.PostSetupDataTablesMixins( self )
+end

@@ -5,12 +5,6 @@ AddCSLuaFile("shared.lua")
 local BaseClass = baseclass.Get("base_warprop")
 --ENT.BaseClass = baseclass.Get("base_warprop")
 
--- Likely to move mixin includes to mixin.lua or similar
-include("mixins/HealthMixin.lua")
-include("mixins/QueryableTagMixin.lua")
-Mixins.RegisterMixin(ENT, HealthMixin)
-Mixins.RegisterMixin(ENT, QueryableTagMixin)
-
 
 -- local references to commonly used functions
 local v = FindMetaTable("Vector")
@@ -49,12 +43,8 @@ timer.Create( "Structure.UpdateNetworkedVariables", Balance.notsorted.WorlTipUpd
 function ENT:Initialize()
 	
 	BaseClass.Initialize( self )
-    
-    self.InitializeMixins( self ) -- Want this to run after all functions has been created.
 	
     self:AddTag( "Structure", function() self:RemoveCallOnRemove("RemoveStructure") end )
 	self:CallOnRemove( "RemoveStructure", function() self:RemoveTag("Structure")  end )
-	
-    self.PostInitializeMixins( self )
     
 end

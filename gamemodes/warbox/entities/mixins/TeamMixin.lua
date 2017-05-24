@@ -16,9 +16,26 @@ TeamMixin.optionalCallbacks =
 }
 
 
-function TeamMixin:Initialize()
+-- Networked stuff
+function TeamMixin:SetupDataTables() -- TODO Setup runs before init...
     
-	self:SetColor( self:GetTeam().Color )
-    
+	self:NetworkVar( "Int", 0, "TeamID" )
+
 end
 
+
+    
+if SERVER then
+    function TeamMixin:Initialize()
+        self:SetColor( self:GetTeam().Color )
+    end
+end
+
+
+function TeamMixin:GetTeam()
+	return WarboxTEAM.GetTeam(self:GetTeamID())
+end
+
+function TeamMixin:SetTeam( warboxTeam )
+	self:SetTeamID( warboxTeam:GetIndex() )
+end

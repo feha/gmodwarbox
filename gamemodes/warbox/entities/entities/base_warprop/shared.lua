@@ -2,28 +2,20 @@ ENT.Type = "anim"
 ENT.Base = "base_anim"
 ENT.Author = "Feha"
 
---DEFINE_BASECLASS( "base_anim" )
+include("mixins/BalanceMixin.lua")
+include("mixins/QueryableTagMixin.lua")
+include("mixins/TeamMixin.lua")
+include("mixins/BuildingMixin.lua")
+Mixins.RegisterMixin(ENT, BalanceMixin)
+Mixins.RegisterMixin(ENT, QueryableTagMixin)
+Mixins.RegisterMixin(ENT, TeamMixin)
+Mixins.RegisterMixin(ENT, BuildingMixin)
 
---ENT.Spawnable = false
---ENT.AdminSpawnable = false
 
-
-function ENT:GetWBType()
-	return self:GetClass()
-end
-
-
--- Networked stuff
 function ENT:SetupDataTables()
-
-	self:NetworkVar( "Int", 0, "TeamID" )
-
-end
-
-function ENT:GetTeam()
-	return WarboxTEAM.GetTeam(self:GetTeamID())
-end
-
-function ENT:SetTeam( warboxTeam )
-	self:SetTeamID( warboxTeam:GetIndex() )
+    self.InitializeMixins( self )
+    
+    --code
+    
+    self.PostSetupDataTablesMixins( self )
 end

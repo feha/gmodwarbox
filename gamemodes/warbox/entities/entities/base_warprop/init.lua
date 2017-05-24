@@ -5,20 +5,6 @@ AddCSLuaFile("shared.lua")
 local BaseClass = baseclass.Get("base_anim")
 --ENT.BaseClass = baseclass.Get("base_anim")
 
-include("mixins/BalanceMixin.lua")
-include("mixins/QueryableTagMixin.lua")
-include("mixins/TeamMixin.lua")
-include("mixins/BuildingMixin.lua")
-Mixins.RegisterMixin(ENT, BalanceMixin)
-Mixins.RegisterMixin(ENT, QueryableTagMixin)
-Mixins.RegisterMixin(ENT, TeamMixin)
-Mixins.RegisterMixin(ENT, BuildingMixin)
-
--- local references to commonly used functions
-local v = FindMetaTable("Vector")
-local LengthSqr = v.LengthSqr
-
-
 -- Static helper functions
 WarProp = {}
 function WarProp.GetTableReference()
@@ -30,27 +16,12 @@ end
 function WarProp.IsValid( warprop )
 	return warprop and IsValid(warprop) and warprop.IsWarProp
 end
-----[[
-function WarProp.UpdateNetworkedVariables( )
-	for k, ply in pairs(player.GetAll()) do
-		local entity = ply:GetEyeTrace().Entity
-		if WarProp.IsValid( entity ) and LengthSqr(ply:GetPos() - entity:GetPos()) < Balance.notsorted.WorldTipDisplayRangeSqr then
-			-- Might change from networked vars to something like net-lib
-			entity:SetNetworkedInt("WB_BuildProgress", math.floor( entity.BuildProgress * 100 ) )
-		end
-	end
-end
-timer.Create( "WarProp.UpdateNetworkedVariables", Balance.notsorted.WorlTipUpdateRate, 0, WarProp.UpdateNetworkedVariables )
---]]
 
------------------------------------------------------------------------------------------
-
+-----------------------------------------------------------------------------------
 
 function ENT:Initialize()
 	
 	BaseClass.Initialize( self )
-    
-    self.InitializeMixins( self )
 	
     self:AddTag( "WarProp", function() self:RemoveCallOnRemove("RemoveWarProp") end )
 	self:CallOnRemove( "RemoveWarProp", function() self:RemoveTag("WarProp")  end )
@@ -74,7 +45,5 @@ function ENT:Initialize()
 	else
 		self:SetMaterial(self.StdMat)
 	end
-	
-    self.PostInitializeMixins( self )
     
 end

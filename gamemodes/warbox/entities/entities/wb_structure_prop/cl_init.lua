@@ -1,3 +1,3 @@
 include("shared.lua")
 
-DEFINE_BASECLASS( "base_structure" )
+local BaseClass = baseclass.Get("base_warprop")

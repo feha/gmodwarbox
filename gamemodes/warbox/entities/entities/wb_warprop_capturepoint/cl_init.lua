@@ -1,6 +1,6 @@
 include("shared.lua")
 
-DEFINE_BASECLASS( "base_warprop" )
+local BaseClass = baseclass.Get("base_warprop")
 
 -- local references to commonly used functions and libraries
 local v = FindMetaTable("Vector")

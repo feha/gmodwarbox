@@ -38,6 +38,18 @@ Balance.player = player
 
 
 -- Base-classes
+local base_projectile = {
+	isProjectile = true,
+	hasGravity = false,
+	timeToLive = 60, -- To ensure failed projectiles can't litter the map and lag
+	damage = 0, -- Most projectiles should inherit from their shooter for balance.
+	projectileForce = 0, -- Most projectiles should inherit from their shooter for balance.
+	explosionRadius = 0, -- Most projectiles should inherit from their shooter for balance.
+	model = "models/Roller_Spikes.mdl",
+}
+Balance.base_projectile = base_projectile
+
+
 local base_warprop = {
 	IsWarProp = true,
 	HasGravity = true,
@@ -63,11 +75,13 @@ local base_unit = {
 	IsMobile = false,
 	IsAi = false,
     IsShooter = false,
+    shooterCanShoot = true, -- Normally true, but useful for shooters with a wind-up period after aquiring a target.
 	Delay = 1, -- seconds
 	OriginalMaxHealth = 25, -- Default unit health
 	Speed = 100,
 	MoveRange = 42,
-	Delay = 0.250, -- seconds
+	Delay = 0.1, -- seconds
+	shooterCooldown = 0.250, -- seconds
 	Range = 500,
 	Priority = {
 		base_structure	=	10,
@@ -77,42 +91,6 @@ local base_unit = {
 base_unit = table.Merge( table.Copy(base_structure), base_unit )
 Balance.base_unit = base_unit
 
---[[
-local base_mobile = {
-	IsMobile = true,
-	OriginalMaxHealth = 10, -- Default mobile unit health
-	Speed = 100,
-	MoveRange = 42
-}
-base_mobile = table.Merge( table.Copy(base_unit), base_mobile )
-Balance.base_mobile = base_mobile
-
-
-local base_ai = {
-	IsAi = true,
-	OriginalMaxHealth = 10, -- Default ai unit health
-	Delay = 0.250, -- seconds
-	Range = 500,
-	Priority = {
-		base_structure	=	10,
-		base_unit		=	20
-	}
-}
-base_ai = table.Merge( table.Copy(base_unit), base_ai )
-Balance.base_ai = base_ai
-
-
-local base_mobile_ai = {
-	OriginalMaxHealth = 5, -- Default ai unit health
-	Delay = 0.500, -- seconds
-	Range = 250,
-	Speed = 50,
-	MoveRange = 50
-}
-base_mobile_ai = table.Merge( table.Copy(base_mobile), base_mobile_ai )
-base_mobile_ai = table.Merge( table.Copy(base_ai), base_mobile_ai )
-Balance.base_mobile_ai = base_mobile_ai
---]]
 
 -- warprops
 local wb_warprop_capturepoint = {
@@ -163,7 +141,7 @@ local wb_shooter_scout = {
 	OriginalMaxHealth = 16,
 	BuildRegen = 100,
 	Cost = 50,
-	Delay = 1.200,
+	shooterCooldown = 1.200,
 	Range = 250,
 	Speed = 75,
 	MoveRange = 50,
@@ -181,14 +159,46 @@ local wb_shooter_infantry = {
 	OriginalMaxHealth = 25,
 	BuildRegen = 100,
 	Cost = 100,
-	Delay = 0.500,
+	shooterCooldown = 0.500,
 	Speed = 50,
 	MoveRange = 50,
 	Range = 500,
 	NumberOfBullets = 1,
-	Spread = Vector(0.05, 0.05, 0.05),
+	spread = Angle(1, 1, 1),
 	Damage = 5,
 	BulletForce = 1,
 }
 wb_shooter_infantry = table.Merge( table.Copy(base_unit), wb_shooter_infantry )
 Balance.wb_shooter_infantry = wb_shooter_infantry
+
+
+local wb_battlemage = {
+	IsMobile = false,
+	IsAi = true,
+    IsShooter = true,
+    Model = "models/props_c17/utilityconnecter006c.mdl",
+	OriginalMaxHealth = 50,
+	BuildRegen = 100,
+	Cost = 500,
+	shooterCooldown = 2.000,
+	shooterWindup = 1.000,
+	Range = 1000,
+	NumberOfBullets = 1,
+	spread = Angle(0.5, 0.5, 0.5),
+	damage = 100,
+	projectileForce = 100,
+	projectileExplosionRadius = 100,
+	projectileMinRadius = 1,
+	projectileMaxRadius = 5,
+}
+wb_battlemage = table.Merge( table.Copy(base_unit), wb_battlemage )
+Balance.wb_battlemage = wb_battlemage
+
+
+local wb_battlemage_projectile = {
+	model = "models/Roller_Spikes.mdl",
+    material = "Models/effects/comball_sphere",
+	timeToLive = 5,
+}
+wb_battlemage_projectile = table.Merge( table.Copy(base_projectile), wb_battlemage_projectile )
+Balance.wb_battlemage_projectile = wb_battlemage_projectile

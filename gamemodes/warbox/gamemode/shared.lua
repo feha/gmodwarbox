@@ -53,3 +53,44 @@ WarboxTEAM( 9,	GameStrings.GetString("orange???"),	Color(	255,	255,	100,	255 ),	
 function GM:Initialize()
 	self.BaseClass.Initialize( self )
 end
+
+
+-- Will be used for pausing and such
+-- 0 = running
+-- 1 = paused (ai, etc.) TODO
+-- 2 = more paused... (physics, etc.)
+local pause = 0
+function GetGameIsPaused()
+	return pause
+end
+
+function SetGameIsPaused( paused )
+	if pause == 2 and paused < 2 then
+		for _,v in pairs(Structure.GetTableReference()) do
+			local phys = v:GetPhysicsObject()
+			if phys:IsValid() then
+				phys:Wake()
+			end
+		end
+	elseif paused == 2 then
+		for _,v in pairs(Structure.GetTableReference()) do
+			local phys = v:GetPhysicsObject()
+			if phys:IsValid() then
+				phys:Sleep()
+			end
+		end
+	end
+	
+	pause = paused
+    
+    if SERVER then
+        net.Start( "SetGameIsPaused" )
+            net.WriteUInt( pause, 3 )
+        net.Broadcast()
+    end
+end
+if SERVER then
+    util.AddNetworkString( "SetGameIsPaused" )
+elseif CLIENT then
+    net.Receive("SetGameIsPaused", function() SetGameIsPaused(net.ReadUInt(3)) end)
+end

@@ -2,7 +2,7 @@ include("shared.lua")
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
-DEFINE_BASECLASS( "base_structure" )
+local BaseClass = baseclass.Get("base_warprop")
 
 -- local references to commonly used functions
 local v = FindMetaTable("Vector")

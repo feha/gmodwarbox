@@ -30,7 +30,7 @@ HealthMixin.networkVars =
 
 function HealthMixin:Initialize()
     
-    self.IsAlive		= true
+    self.IsAlive = true
     self.MaxHealth = self.OriginalMaxHealth
     self.CurHealth = self.MaxHealth
     

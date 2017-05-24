@@ -2,7 +2,16 @@ ENT.Type = "anim"
 ENT.Base = "base_warprop"
 ENT.Author = "Feha"
 
---DEFINE_BASECLASS( "base_warprop" )
+-- Likely to move mixin includes to mixin.lua or similar
+include("mixins/HealthMixin.lua")
+include("mixins/QueryableTagMixin.lua")
+Mixins.RegisterMixin(ENT, HealthMixin)
+Mixins.RegisterMixin(ENT, QueryableTagMixin)
 
---ENT.Spawnable = false
---ENT.AdminSpawnable = false
+function ENT:SetupDataTables()
+    self.InitializeMixins( self )
+    
+    --code
+    
+    self.PostSetupDataTablesMixins( self )
+end
