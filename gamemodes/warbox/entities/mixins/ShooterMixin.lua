@@ -26,12 +26,6 @@ ShooterMixin.shooterNextShot = nil,
 
 
 if SERVER then
-    function ShooterMixin:Initialize()
-        print("SHOOOTRE")
-        self.localShootPos = self:OBBCenter()
-        
-    end
-
 
     function ShooterMixin:Think()
 

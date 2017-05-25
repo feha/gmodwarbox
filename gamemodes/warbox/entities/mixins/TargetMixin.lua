@@ -14,12 +14,12 @@ TargetMixin.expectedCallbacks =
 TargetMixin.optionalCallbacks =
 {
     IsValidTarget = "Called to verify if a target is valid. Default-behavior is overridden if this exists.",
-    GetTargetingPosition = "Called when something tries to target this TargetMixin-entity.",
+    GetTargetPosition = "Called when something tries to target this TargetMixin-entity.",
 }
 
 
 function TargetMixin:Initialize()
-	self.localTargetingPos = self:OBBCenter()
+	self.localTargetPos = self:OBBCenter()
 end
 
 
@@ -37,6 +37,7 @@ end
 
 --- Function used to get the position used for targetting this entity.
 -- Default-behaviour is to return the world position of its `OBBCenter()`.
-function TargetMixin:GetTargetingPos( )
-	return self:LocalToWorld( self.localTargetingPos )
+function TargetMixin:GetTargetPosition()
+    print("targetpos")
+	return self:LocalToWorld( self.localTargetPos )
 end
